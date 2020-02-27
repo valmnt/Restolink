@@ -1,4 +1,4 @@
-##<center> Base de données :</center>
+# Base de données :
 
 ![Bdd schema](img/bdd.png)
 
