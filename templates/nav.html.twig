@@ -1,23 +1,34 @@
-<nav class="navbar navbar-expand-md">
-    <a class="navbar-brand" id="logo" href="index.html"><img class="logo" src="./assets/img/logo.png" alt=""></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <img class="menu" src="https://img.icons8.com/office/160/000000/menu.png">
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a id="titre" class="nav-link" href="restaurants.html">Restaurants</a>
-            </li>
-            <li class="nav-item">
-                <a id="titre" class="nav-link" href="#">Titre</a>
-            </li>
-            <li class="nav-item">
-                <a id="titre" class="nav-link" href="#" tabindex="-1" aria-disabled="true">titre</a>
-            </li>
-            <li class="nav-item">
-                <a id="titre" class="nav-link" href="#" tabindex="-1" aria-disabled="true">titre</a>
-            </li>
-        </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">RestoLink</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a {{ app.request.attributes.get('_route') == 'index' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} href="{{ path('index') }}">Home</a>
+
+    {% if is_granted('ROLE_ADMIN') %}
+      <a class="nav-item nav-link" href="#">Administration</a>
+      <a class="nav-item nav-link" href="#">Restaurants</a>
+      <a class="nav-item nav-link" href="#">Mon Profil</a>
+    {% endif %}
+
+    {% if is_granted('ROLE_RESTAURATEUR') %}
+      <a class="nav-item nav-link" href="#">Mes Restaurants</a>
+      <a class="nav-item nav-link" href="#">Mon Profil</a>
+    {% endif %}
+
+    {% if is_granted('ROLE_USER') %}
+      <a class="nav-item nav-link" href="#">Mon Profil</a>
+    {% endif %}
+
+    {% if app.user %}
+         <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout : {{ app.user.username }}</a>
+    {% else %}
+        <a {{ app.request.attributes.get('_route') == 'app_login' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_login') }}">Connexion</a>
+        <a {{ app.request.attributes.get('_route') == 'app_inscription' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_inscription') }}">Inscription</a>
+    {% endif %}
+      
     </div>
+  </div>
 </nav>
