@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\InscriptionType;
+use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Constraints\Length;
 
 class SecurityController extends AbstractController
 {
@@ -40,15 +41,16 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/inscription", name="app_inscription")
+     * @Route("/register", name="app_register")
      */
-    public function inscritpion(EntityManagerInterface $entityManagerInterface, Request $request,  UserPasswordEncoderInterface $userPasswordEncoderInterface)
+    public function register(EntityManagerInterface $entityManagerInterface, Request $request,  UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
         $user = new User();
-        $form = $this->createForm(InscriptionType::class, $user);
+        $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $password = $userPasswordEncoderInterface->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
             $user->setRoles(['ROLE_USER']);
@@ -57,6 +59,6 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('security/inscription.html.twig',  ['form' => $form->createView()]);
+        return $this->render('security/register.html.twig',  ['form' => $form->createView()]);
     }
 }

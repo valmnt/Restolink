@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">RestoLink</a>
+  <a class="navbar-brand" href="{{ path('index') }}">RestoLink</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,26 +7,22 @@
     <div class="navbar-nav">
       <a {{ app.request.attributes.get('_route') == 'index' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} href="{{ path('index') }}">Home</a>
 
+    {% if app.user %}
+
     {% if is_granted('ROLE_ADMIN') %}
       <a class="nav-item nav-link" href="#">Administration</a>
       <a class="nav-item nav-link" href="#">Restaurants</a>
-      <a class="nav-item nav-link" href="#">Mon Profil</a>
     {% endif %}
 
     {% if is_granted('ROLE_RESTAURATEUR') %}
       <a class="nav-item nav-link" href="#">Mes Restaurants</a>
-      <a class="nav-item nav-link" href="#">Mon Profil</a>
     {% endif %}
 
-    {% if is_granted('ROLE_USER') %}
       <a class="nav-item nav-link" href="#">Mon Profil</a>
-    {% endif %}
-
-    {% if app.user %}
-         <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout : {{ app.user.username }}</a>
+      <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout : {{ app.user.username }}</a>
     {% else %}
         <a {{ app.request.attributes.get('_route') == 'app_login' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_login') }}">Connexion</a>
-        <a {{ app.request.attributes.get('_route') == 'app_inscription' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_inscription') }}">Inscription</a>
+        <a {{ app.request.attributes.get('_route') == 'app_register' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_register') }}">Inscription</a>
     {% endif %}
       
     </div>
