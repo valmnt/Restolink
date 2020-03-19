@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Restaurants
+{% endblock %}
+
+{% block body %}
+{% for restaurant in restaurants %}
+    {% if loop.first %}
+        <div class="row"> {# open row #}
+    {% endif %}
+
+    {% include "restaurant/item-restaurant.html.twig" with {'image': restaurant.image, 'libelle': restaurant.libelle, 'description': restaurant.description } %}
+
+    {% if loop.index % 3 == 0 %}
+        </div><div class="row"> {# after 3 iterates close row and open new #}
+    {% endif %}
+
+    {% if loop.last %}
+        </div> {# close last row #}
+    {% endif %}
+{% endfor %}
+{% endblock %}
