@@ -19,16 +19,44 @@ class AppFixtures extends Fixture
         $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
     }
 
+    public function roleUser($faker, $role, $manager)
+    {
+        for ($i = 0; $i <= 5; $i++) {
+            $user = new User();
+            $user->setEmail($faker->email())
+                ->setNom($faker->name())
+                ->setPrenom($faker->firstName())
+                ->setPassword($this->userPasswordEncoderInterface->encodePassword($user, 'restolink'))
+                ->setAdressePostal($faker->address())
+                ->setRoles($role);
+
+            $manager->persist($user);
+        }
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
 
         for ($i = 0; $i <= 25; $i++) {
+
             $resto = new Restaurant();
+            $user = new User();
+
+            $user->setEmail($faker->email())
+                ->setNom($faker->name())
+                ->setPrenom($faker->firstName())
+                ->setAdressePostal($faker->address())
+                ->setPassword($this->userPasswordEncoderInterface->encodePassword($user, 'restolink'))
+                ->setRoles(['ROLE_RESTAURATEUR']);
+            $manager->persist($user);
+
             $resto->setDescription($faker->text())
                 ->setLibelle($faker->word())
-                ->setImage('https://source.unsplash.com/random/400x300');
+                ->setImage('https://source.unsplash.com/random/400x300')
+                ->setMembres($user);
             $manager->persist($resto);
+
             for ($j = 0; $j < 25; $j++) {
                 $plat = new Plat();
                 $plat->setLibelle($faker->word())
@@ -39,27 +67,8 @@ class AppFixtures extends Fixture
             }
         }
 
-        for ($i = 0; $i <= 10; $i++) {
-            $user = new User();
-            $user->setEmail($faker->email())
-                ->setNom($faker->name())
-                ->setPrenom($faker->firstName())
-                ->setAdressePostal($faker->address())
-                ->setPassword($this->userPasswordEncoderInterface->encodePassword($user, 'restolink'))
-                ->setRoles(['ROLE_USER']);
-
-            $manager->persist($user);
-        }
-
-        $user = new User();
-        $user->setEmail($faker->email())
-            ->setNom($faker->name())
-            ->setPrenom($faker->firstName())
-            ->setPassword($this->userPasswordEncoderInterface->encodePassword($user, 'restolink'))
-            ->setAdressePostal($faker->address())
-            ->setRoles(['ROLE_ADMIN']);
-
-        $manager->persist($user);
+        $this->roleUser($faker, ['ROLE_ADMIN'], $manager);
+        $this->roleUser($faker, ['ROLE_USER'], $manager);
 
         $manager->flush();
     }

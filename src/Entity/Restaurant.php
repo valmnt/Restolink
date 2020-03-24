@@ -43,6 +43,12 @@ class Restaurant
      */
     private $plats;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="restaurants")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $membres;
+
     public function __construct()
     {
         $this->plats = new ArrayCollection();
@@ -132,4 +138,15 @@ class Restaurant
         return $this;
     }
 
+    public function getMembres(): ?User
+    {
+        return $this->membres;
+    }
+
+    public function setMembres(?User $membres): self
+    {
+        $this->membres = $membres;
+
+        return $this;
+    }
 }

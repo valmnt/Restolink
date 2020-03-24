@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes restaurants{% endblock %}
+
+{% block body %}
+<div style="padding-left: 90%;">
+    <a href="{{ path('add__restaurant') }}"><button type="button" class="btn btn-primary">Ajouter un restaurant</button></a>
+</div>
+<div class="container">
+  <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Editer</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for restaurant in user.restaurants %}
+        <tr>
+            <td>{{restaurant.libelle}}</td>
+            <td>{{restaurant.description}}</td>
+            <td><img style="height: 100px;" src="{{restaurant.image}}"></td>
+        </tr>
+    {% endfor %}
+       </tbody>
+    </table>
+</div>
+{% endblock %}
