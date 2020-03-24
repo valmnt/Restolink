@@ -1,11 +1,13 @@
-<div class="col-lg-4">
-    <h2>{{libelle}}</h2>
-    <div class="contain_img">
-        <img class="img" src="{{image}}" alt="">
+
+    <div class=" col-lg-4">
+        <h2>{{libelle}}</h2>
+        <div class="contain_img">
+            <img class="img" src="{{image}}" alt="">
+        </div>
+        <div class="contain_desc">
+            <p class="description">
+                {{description}}
+            </p>
+        </div>
+        <a class="stretched-link" href="{{path('restaurant_unique', {'id': id})}}"></a>
     </div>
-    <div class="contain_desc">
-        <p class="description">
-            {{description}}
-        </p>
-    </div>
-</div>

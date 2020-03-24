@@ -1,11 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Restaurants
+    {{ parent() }} - {{restaurant.libelle|title}}
 {% endblock %}
 
 {% block body %}
+<h1 class="title-background-grey text-center">
+    {{restaurant.libelle|title}}
+</h1>
+<div class="container">
 
-    {{ dump(restaurant) }}
-    {{ dump(plats) }}
+    {% for plat in restaurant.plats %}
+        {% if loop.first %}
+            <div class="card-deck my-5">
+        {% endif %}
+
+        {% include "restaurant/plat.html.twig" with {'image': plat.image, 'libelle': plat.libelle, 'prix': plat.prix} %}
+
+        {% if loop.index % 3 == 0 %}
+            </div><div class="card-deck my-5">
+        {% endif %}
+
+        {% if loop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}
