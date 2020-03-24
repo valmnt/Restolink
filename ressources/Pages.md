@@ -7,18 +7,21 @@
 * Une page avec la liste des restaurants avec différents filtres qui pourront être activé 
 * Une page spécifique sur un restaurant
 * Une page de contact
+* Une page mot de passe oublié
 
 ## Accessible pour tout les utilisateurs (admins, restaurateurs et client)
 
 * Une page commande/panier avec un récapitulatif de sa commande
 * Une page Mon compte
-
+* Une page historique des commandes
+* Une page commande en cours 
 
 ## Accessible pour les restaurateurs et admins
 
 * Une page restaurants avec la liste de ses restaurants
 * Une page spécifique a chaque restaurant qu'il possède
 * Une page de création de plats
+* Une page commande en cours pour chaque restaurant
 
 ## Accessible pour les admins
 
