@@ -5,19 +5,22 @@
 {% endblock %}
 
 {% block body %}
+<h1 class="title-background-grey text-center">
+    Restaurants
+</h1>
 {% for restaurant in restaurants %}
     {% if loop.first %}
-        <div class="row"> {# open row #}
+        <div class="row">
     {% endif %}
 
-    {% include "restaurant/item-restaurant.html.twig" with {'image': restaurant.image, 'libelle': restaurant.libelle, 'description': restaurant.description } %}
+    {% include "restaurant/item-restaurant.html.twig" with {'image': restaurant.image, 'libelle': restaurant.libelle, 'description': restaurant.description, 'id': restaurant.id } %}
 
     {% if loop.index % 3 == 0 %}
-        </div><div class="row"> {# after 3 iterates close row and open new #}
+        </div><div class="row">
     {% endif %}
 
     {% if loop.last %}
-        </div> {# close last row #}
+        </div>
     {% endif %}
 {% endfor %}
 {% endblock %}
