@@ -45,11 +45,12 @@ class RestaurateurController extends AbstractController
             $restaurant->setImage('/uploads/' . $fileName);
             $entityManagerInterface->persist($restaurant);
             $entityManagerInterface->flush();
+
+            return $this->redirectToRoute('mes_restaurants');
         }
 
         return $this->render('restaurateur/add-restaurant.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user
+            'form' => $form->createView()
         ]);
     }
 }

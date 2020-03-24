@@ -14,10 +14,7 @@
         <a class="nav-item nav-link" href="#">Administration</a>
       {% endif %}
 
-      {% if is_granted('ROLE_RESTAURATEUR') %}
         <a class="nav-item nav-link" href="{{ path('mes_restaurants') }}">Mes Restaurants</a>
-      {% endif %}
-
         <a class="nav-item nav-link" href="#">Mon Profil</a>
         <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout : {{ app.user.username }}</a>
       {% else %}
