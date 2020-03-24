@@ -131,4 +131,5 @@ class Restaurant
 
         return $this;
     }
+
 }

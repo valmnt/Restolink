@@ -27,15 +27,15 @@ class Plat
     private $prix;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Restaurant", inversedBy="plats")
      * @ORM\JoinColumn(nullable=false)
      */
     private $restaurant;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $image;
 
     public function getId(): ?int
     {
@@ -66,18 +66,6 @@ class Plat
         return $this;
     }
 
-    public function getRestaurant(): ?Restaurant
-    {
-        return $this->restaurant;
-    }
-
-    public function setRestaurant(?Restaurant $restaurant): self
-    {
-        $this->restaurant = $restaurant;
-
-        return $this;
-    }
-
     public function getImage(): ?string
     {
         return $this->image;
@@ -86,6 +74,18 @@ class Plat
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getRestaurant(): ?Restaurant
+    {
+        return $this->restaurant;
+    }
+
+    public function setRestaurant(?Restaurant $restaurant): self
+    {
+        $this->restaurant = $restaurant;
 
         return $this;
     }
