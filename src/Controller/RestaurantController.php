@@ -37,7 +37,7 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/{id}", name="restaurant_unique")
      */
-    public function unique(Restaurant $restaurant, RestaurantRepository $restaurantRepository)
+    public function unique(Restaurant $restaurant)
     {
         $plats = $restaurant->getPlats();
         return $this->render('restaurant/restaurant-plat.html.twig', [
