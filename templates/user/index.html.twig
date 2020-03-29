@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">{{user.prenom}} {{ user.nom }}</h1>
+      <p><b>🧍 Status :</b> {{role[0]}}</p>
+      <p><b>🏠 Adresse Postal :</b> {{user.adressePostal}}</p>
+      {% if user.solde is null %}
+      <p><b>💸 Solde Actuel :</b> 0</p>
+      {% else %}
+      <p><b>💸 Solde Actuel :</b> {{user.solde}}€</p>
+      {% endif %}
+      <p><a class="btn btn-primary btn-lg" href="{{ path('edit_user', {'id' : user.id})}}" role="button">Editer le profil »</a></p>
+    </div>
+  </div>
+{% endblock %}

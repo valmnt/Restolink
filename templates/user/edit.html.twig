@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Profil{% endblock %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+<div class="container" style="width: 20%;">
+{{ form(form) }}
+<a href="{{ path('user') }}"><button class="btn btn-danger">Cancel</button></a>
+</div>
+{% endblock %}

@@ -15,7 +15,7 @@
       {% endif %}
 
         <a class="nav-item nav-link" href="{{ path('mes_restaurants') }}">Mes Restaurants</a>
-        <a class="nav-item nav-link" href="#">Mon Profil</a>
+        <a class="nav-item nav-link" href="{{ path('user') }}">Mon Profil</a>
         <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout : {{ app.user.username }}</a>
       {% else %}
           <a {{ app.request.attributes.get('_route') == 'app_login' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_login') }}">Connexion</a>

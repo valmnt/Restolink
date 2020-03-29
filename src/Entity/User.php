@@ -42,9 +42,7 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      * @Assert\Length(
      *      min = 8,
-     *      max = 20,
      *      minMessage = "Your password must be at least {{ limit }} characters long",
-     *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
      * )
      */
     private $password;
