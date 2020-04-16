@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Portefeuille{% endblock %}
+
+{% block body %}
+<style>
+.container {
+    width: 20%;
+}
+</style>
+<div class="container">
+{{ form(form) }}
+<a href="{{ path('user') }}"><button class="btn btn-danger">Cancel</button></a>
+</div>
+{% endblock %}
