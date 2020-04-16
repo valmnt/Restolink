@@ -11,6 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
+    private $entityManagerInterface;
+
+    public function __construct(EntityManagerInterface $entityManagerInterface)
+    {
+        $this->entityManagerInterface = $entityManagerInterface;
+    }
+
     /**
      * @Route("/user", name="user")
      */
@@ -27,16 +34,37 @@ class UserController extends AbstractController
     /**
      * @Route("/edit_user/{id}", name="edit_user")
      */
-    public function editUser(Request $request, User $user, EntityManagerInterface $entityManagerInterface)
+    public function editUser(Request $request, User $user)
     {
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManagerInterface->flush();
+            $this->entityManagerInterface->flush();
             return $this->redirectToRoute('user');
         }
 
         return $this->render('user/edit.html.twig',  ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/alert_delete_user/{id}", name="alert_delete_user")
+     */
+    public function alertDelete(User $user)
+    {
+        return $this->render('user/delete.html.twig', ['user' => $user]);
+    }
+
+    // faire un listenener ou Subscriber pour delete les photos sur le serveur
+    /**
+     * @Route("/delete_user/{id}", name="delete_user")
+     */
+    public function deleteUser(User $user)
+    {
+        if ($user) {
+            $this->entityManagerInterface->remove($user);
+            $this->entityManagerInterface->flush();
+            return $this->render('index/index.html.twig');
+        }
     }
 }

@@ -13,7 +13,9 @@
       {% else %}
       <p><b>💸 Solde Actuel :</b> {{user.solde}}€</p>
       {% endif %}
-      <p><a class="btn btn-primary btn-lg" href="{{ path('edit_user', {'id' : user.id})}}" role="button">Editer le profil »</a></p>
+      <p><a class="btn btn-primary btn-lg" href="{{ path('edit_user', {'id' : user.id})}}" role="button">✍️ Editer le profil »</a></p>
+      <p><a class="btn btn-danger btn-lg" role="button" style="color: white"  href="{{ path('alert_delete_user', {'id' : user.id })}}">🗑️ Supprimer le profil »</a></p>
+      <a class="btn btn-success btn-lg" href="{{ path('add__restaurant') }}">➕ Ajouter un restaurant »</a>
     </div>
   </div>
 {% endblock %}
