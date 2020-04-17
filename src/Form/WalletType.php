@@ -15,7 +15,7 @@ class WalletType extends AbstractType
     {
         $builder
             ->add('solde')
-            ->add('password', PasswordType::class, ['mapped' => false])
+            ->add('password', PasswordType::class)
             ->add('submit', SubmitType::class);
     }
 

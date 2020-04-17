@@ -9,6 +9,11 @@
 }
 </style>
 <div class="container">
+{% for message in app.flashes('danger') %}
+    <div class="alert alert-danger">
+        {{ message }}
+    </div>
+{% endfor %}
 {{ form(form) }}
 <a href="{{ path('user') }}"><button class="btn btn-danger">Cancel</button></a>
 </div>

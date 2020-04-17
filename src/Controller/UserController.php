@@ -10,14 +10,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
     private $entityManagerInterface;
+    private $userPasswordEncoderInterface;
 
-    public function __construct(EntityManagerInterface $entityManagerInterface)
+    public function __construct(EntityManagerInterface $entityManagerInterface, UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
         $this->entityManagerInterface = $entityManagerInterface;
+        $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
     }
 
     /**
@@ -73,22 +76,28 @@ class UserController extends AbstractController
     /**
      * @Route("/update_wallet/{id}", name="update_wallet")
      */
-    public function updateWallet(Request $request, User $user)
+    public function updateWallet(Request $request)
     {
-        $form = $this->createForm(WalletType::class, $user);
+        $userForm = new User();
+        $form = $this->createForm(WalletType::class, $userForm);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $password = $user->getPassword();
-            $userData = new User();
-            $userData = $form->getData();
-            $formPassword = $userData->getPassword();
+        $userVerificator = new User();
+        $userVerificator = $this->getUser();
 
-            if ($password === $formPassword) {
+        $userForm = $form->getData();
+        $formPassword = $userForm->getPassword();
+        $passwordValid = $this->userPasswordEncoderInterface->isPasswordValid($userVerificator, $formPassword);
+
+        if ($passwordValid) {
+            $userVerificator->setSolde($userForm->getSolde());
+            if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManagerInterface->flush();
-                $role = $user->getRoles();
-                return $this->render('user/index.html.twig', ['user' => $user, 'role' => $role]);
+                $role = $userVerificator->getRoles();
+                return $this->render('user/index.html.twig', ['user' => $userVerificator, 'role' => $role]);
             }
+        } else if (!$passwordValid && $formPassword !== '') {
+            $this->addFlash('danger', 'Mot de passe incorrect 😭');
         }
 
         return $this->render('user/wallet.html.twig', ['form' => $form->createView()]);
