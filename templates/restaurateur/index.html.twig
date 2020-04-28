@@ -8,7 +8,7 @@
     <div class="jumbotron">
         <h1>Devenez restaurateur !</h1>
         <p class="lead">Toi aussi devient le prochain grand chef cuisinier, en devenant restaurateur ! 🍜</p>
-        <a href="{{ path('add__restaurant') }}"><button type="button" class="btn btn-primary">Ajoutes ton premier restaurant</button></a>
+        <a href="{{ path('add_restaurant') }}"><button type="button" class="btn btn-primary">Ajoutes ton premier restaurant</button></a>
   </div>
 </div>
 {% else %}
@@ -29,6 +29,8 @@
             <td>{{restaurant.libelle}}</td>
             <td>{{restaurant.description}}</td>
             <td><img style="height: 100px;" src="{{restaurant.image}}"></td>
+            <td><a class="" href="{{path('plats_restaurant_restaurateur', {'id': restaurant.id})}}">Editer</a></td>
+            <td><a class="" href="{{path('delete_restaurant_restaurateur', {'id': restaurant.id})}}">Supprimer</a></td>
         </tr>
     {% endfor %}
        </tbody>
