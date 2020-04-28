@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes restaurants{% endblock %}
+
+{% block body %}
+
+<div style="padding-left: 90%;">
+    <a href="{{ path('add_plat_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Ajouter un plat</button></a>
+</div>
+<div style="padding-left: 90%;">
+    <a href="{{ path('edit_restaurant_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Editer les informations du restaurant</button></a>
+</div>
+<div class="container">
+  <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Image</th>
+                <th scope="col">Editer</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for plat in restaurant.plats %}
+        <tr>
+            <td>{{plat.libelle}}</td>
+            <td>{{plat.prix}} €</td>
+            <td><img style="height: 100px;" src="{{plat.image}}"></td>
+            <td><a class="" href="{{path('edit_plat_restaurateur', {'id': restaurant.id ,'plat_id': plat.id})}}">Editer</a></td>
+            <td><a class="" href="{{path('delete_plat_restaurateur', {'id': restaurant.id ,'plat_id': plat.id})}}">Supprimer</a></td>
+        </tr>
+    {% endfor %}
+       </tbody>
+    </table>
+</div>
+{% endblock %}

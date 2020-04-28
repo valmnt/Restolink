@@ -2,16 +2,15 @@
 
 namespace App\Utils;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadService
 {
-    public function uploadImage($form, $field, $directory)
+    public function uploadImage(UploadedFile $file, $directory)
     {
-        $file = $form->get($field)->getData();
         $fileName = md5(uniqid()) . '.' . $file->guessExtension();
         $file->move($directory, $fileName);
-
-        return $fileName;
+        $fileFolder = '/uploads/'. $fileName;
+        return $fileFolder;
     }
 }

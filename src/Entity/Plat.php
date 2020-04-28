@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PlatRepository")
  */
-class Plat
+class Plat extends EntityImage
 {
     /**
      * @ORM\Id()
@@ -25,11 +25,6 @@ class Plat
      * @ORM\Column(type="float")
      */
     private $prix;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $image;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Restaurant", inversedBy="plats")
@@ -62,18 +57,6 @@ class Plat
     public function setPrix(float $prix): self
     {
         $this->prix = $prix;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
 
         return $this;
     }
