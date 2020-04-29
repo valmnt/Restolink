@@ -41,7 +41,14 @@ class OrderController extends AbstractController
     public function addPlatSession(Plat $plat)
     {
         $restaurant = $plat->getRestaurant();
-        if ($this->session->has('allPlats')) {
+        $boolSession = $this->session->has('allPlats');
+
+        if (!$boolSession) {
+            $this->session->set('allPlats', $allPlats = []);
+            $boolSession = $this->session->has('allPlats');
+        }
+
+        if ($boolSession) {
 
             $allPlats = $this->session->get('allPlats');
 
@@ -51,10 +58,7 @@ class OrderController extends AbstractController
 
             $allPlats[$plat->getId()] = $commandeDetails;
             $this->session->set('allPlats', $allPlats);
-        } else {
-            $this->session->set('allPlats', $allPlats = []);
         }
-
         return $this->render('restaurant/restaurant-plat.html.twig', ['restaurant' => $restaurant]);
     }
 
