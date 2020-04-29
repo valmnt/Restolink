@@ -72,9 +72,15 @@ class User implements UserInterface
      */
     private $restaurants;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Commande", mappedBy="membres", orphanRemoval=true)
+     */
+    private $commandes;
+
     public function __construct()
     {
         $this->restaurants = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -228,6 +234,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($restaurant->getMembres() === $this) {
                 $restaurant->setMembres(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commande[]
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
+            $commande->setMembres($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->contains($commande)) {
+            $this->commandes->removeElement($commande);
+            // set the owning side to null (unless already changed)
+            if ($commande->getMembres() === $this) {
+                $commande->setMembres(null);
             }
         }
 

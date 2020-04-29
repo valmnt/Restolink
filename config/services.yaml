@@ -29,3 +29,7 @@ services:
     App\EventSubscriber\ImageDeleteSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+
+    App\EventSubscriber\CommandePersistSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
