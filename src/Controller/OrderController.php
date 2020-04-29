@@ -69,6 +69,7 @@ class OrderController extends AbstractController
 
             $commande = new Commande();
             $commande->setMembres($this->getUser());
+            $commande->setAdresse($this->getUser()->getAdressePostal());
 
             $this->em->persist($commande);
 
