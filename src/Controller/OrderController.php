@@ -124,6 +124,8 @@ class OrderController extends AbstractController
                 $this->addFlash('danger', 'Oh bah le portefeuille est vide 😭');
                 return $this->redirectToRoute('plat_order');
             }
+        } else {
+            return $this->redirectToRoute('restaurants_liste');
         }
     }
 
