@@ -11,11 +11,28 @@
     align-items: center;
     margin-top: 2%;
 }
+#alertMsg {
+    text-align: center;
+    width: 50%;
+    margin-top: 2%;
+}
+#contain_alert {
+    width: 100%;
+    display: flex;
+    alert-items: center;
+    justify-content: center;
+}
 </style>
 
-
+<div id="contain_alert">
+{% for message in app.flashes('danger') %}
+    <div class="alert alert-danger" id="alertMsg">
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
 <div class="container">
-    <ul class="list-group list-group-flush" style="margin-top: 5%;">
+    <ul class="list-group list-group-flush" style="margin-top: 1%;">
       <li class="list-group-item list-group-item-secondary" style="text-align: center;">Récapitulatif de commande</li>
 {% for plat in plats %}
         <li class="list-group-item" style="text-align: center;">

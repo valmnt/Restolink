@@ -5,8 +5,12 @@ namespace App\Controller;
 use App\Entity\Commande;
 use App\Entity\CommandeDetails;
 use App\Entity\Plat;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Swift_Mailer;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,15 +44,16 @@ class OrderController extends AbstractController
      */
     public function addPlatSession(Plat $plat)
     {
-        $restaurant = $plat->getRestaurant();
         $boolSession = $this->session->has('allPlats');
+        $restaurant = $plat->getRestaurant();
 
         if (!$boolSession) {
             $this->session->set('allPlats', $allPlats = []);
             $boolSession = $this->session->has('allPlats');
+            $this->session->set('restaurant', $plat->getRestaurant()->getLibelle());
         }
 
-        if ($boolSession) {
+        if ($boolSession && $restaurant->getLibelle() === $this->session->get('restaurant')) {
 
             $allPlats = $this->session->get('allPlats');
 
@@ -58,35 +63,68 @@ class OrderController extends AbstractController
 
             $allPlats[$plat->getId()] = $commandeDetails;
             $this->session->set('allPlats', $allPlats);
+            return $this->render('restaurant/restaurant-plat.html.twig', ['restaurant' => $restaurant]);
+        } else {
+            $this->addFlash('warning', 'Vous pouvez commander des plats uniquement s\'ils font partis du même restaurant.');
+            return $this->redirectToRoute('restaurants_liste');
         }
-        return $this->render('restaurant/restaurant-plat.html.twig', ['restaurant' => $restaurant]);
     }
 
     /**
      * @Route("/order_bdd", name="commande_plat_order")
      */
-    public function setCommandeBdd()
+    public function setCommandeBdd(UserRepository $userRepository, Swift_Mailer $swift_Mailer)
     {
+        $user = new User();
+        $user = $this->getUser();
         $allPlats = $this->session->get('allPlats');
+        $solde = $user->getSolde();
+        $bill = 0;
+        $restaurant = '';
 
         if ($allPlats) {
 
             $commande = new Commande();
-            $commande->setMembres($this->getUser());
-            $commande->setAdresse($this->getUser()->getAdressePostal());
+            $commande->setMembres($user);
+            $commande->setAdresse($user->getAdressePostal());
 
             $this->em->persist($commande);
 
-            foreach ($allPlats as $plat) {
-                $plat = $plat->setCommande($commande);
-                $this->em->merge($plat);
+            foreach ($allPlats as $commandeDetails) {
+                if ($restaurant === '') {
+                    $restaurant = $commandeDetails->getPlats();
+                    $restaurant = $restaurant->getRestaurant();
+                    $membre = $restaurant->getMembres();
+
+                    $membre = $userRepository->findBy(['id' => $membre->getId()]);
+                }
+                $bill += $commandeDetails->getPrix();
+                $commandeDetails = $commandeDetails->setCommande($commande);
+                $this->em->merge($commandeDetails);
             }
-            $this->em->flush();
 
-            $this->session->remove('allPlats');
+            if ($solde >= $bill) {
+
+                $solde = $solde - $bill;
+                $user->setSolde($solde);
+
+                $this->em->flush();
+
+                $this->session->remove('allPlats');
+                $this->session->remove('restaurant');
+
+                $message = (new Swift_Message('Nouvelle Commande'))
+                    ->setFrom('valentinmont8@gmail.com')
+                    ->setTo($membre[0]->getEmail())
+                    ->setBody('Bonjour ' . $membre[0]->getNom() . ', Nous vous informons qu\'une nouvelle commande a été passé dans votre restaurant. Pour avoir le detail, nous vous invitons à vous connecter sur la plateforme. L\'équipe Restolink');
+
+                $swift_Mailer->send($message);
+                return $this->redirectToRoute('user');
+            } else {
+                $this->addFlash('danger', 'Oh bah le portefeuille est vide 😭');
+                return $this->redirectToRoute('plat_order');
+            }
         }
-
-        return $this->redirectToRoute('user');
     }
 
 
@@ -110,6 +148,8 @@ class OrderController extends AbstractController
             if ($allPlats) {
                 return $this->render('order/index.html.twig', ['plats' => $allPlats]);
             } else {
+                $this->session->remove('allPlats');
+                $this->session->remove('restaurant');
                 return $this->redirectToRoute('restaurants_liste');
             }
         }

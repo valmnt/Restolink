@@ -8,6 +8,8 @@ use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Swift_Mailer;
+use Swift_Message;
 
 class CommandePersistSubscriber implements EventSubscriber
 {
@@ -26,7 +28,7 @@ class CommandePersistSubscriber implements EventSubscriber
             $object->setDateAchat(new DateTime());
 
             $dateRecpetion = new DateTime();
-            $dateRecpetion->add(new DateInterval('PT20M30S'));
+            $dateRecpetion->add(new DateInterval('PT1H'));
             $object->setDateReception($dateRecpetion);
         }
     }
