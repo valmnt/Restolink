@@ -34,10 +34,10 @@
 <div class="container">
     <ul class="list-group list-group-flush" style="margin-top: 1%;">
       <li class="list-group-item list-group-item-secondary" style="text-align: center;">Récapitulatif de commande</li>
-{% for plat in plats %}
+{% for commandeDetailSession in commandeSession %}
         <li class="list-group-item" style="text-align: center;">
-        {{plat.plats.libelle}} - {{plat.plats.prix}}€ 
-        <a href="{{ path('delete_plat_order', {'id' : plat.plats.id})}}" ><button type="button" class="btn btn-outline-danger" style="margin-left: 2%;">Supprimer</button></a>
+        {{commandeDetailSession.plats.libelle}} - {{commandeDetailSession.plats.prix}}€ 
+        <a href="{{ path('delete_plat_order', {'id' : commandeDetailSession.plats.id})}}" ><button type="button" class="btn btn-outline-danger" style="margin-left: 2%;">Supprimer</button></a>
         </li>
     {% endfor %}
         </ul>

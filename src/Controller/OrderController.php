@@ -7,7 +7,6 @@ use App\Entity\CommandeDetails;
 use App\Entity\Plat;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Swift_Mailer;
 use Swift_Message;
@@ -31,10 +30,11 @@ class OrderController extends AbstractController
      */
     public function index()
     {
-        $allPlats = $this->session->get('allPlats');
-        if ($allPlats) {
-            return $this->render('order/index.html.twig', ['plats' => $allPlats]);
+        $commandeSession = $this->session->get('commandeSession');
+        if ($commandeSession) {
+            return $this->render('order/index.html.twig', ['commandeSession' => $commandeSession]);
         } else {
+            $this->addFlash('warning', 'Veuillez choisir de bons petits plats 😋');
             return $this->redirectToRoute('restaurants_liste');
         }
     }
@@ -44,25 +44,26 @@ class OrderController extends AbstractController
      */
     public function addPlatSession(Plat $plat)
     {
-        $boolSession = $this->session->has('allPlats');
+        $boolSession = $this->session->has('commandeSession');
         $restaurant = $plat->getRestaurant();
 
         if (!$boolSession) {
-            $this->session->set('allPlats', $allPlats = []);
-            $boolSession = $this->session->has('allPlats');
+            $this->session->set('commandeSession', $commandeSession = []);
+            $boolSession = $this->session->has('commandeSession');
             $this->session->set('restaurant', $plat->getRestaurant()->getLibelle());
         }
 
         if ($boolSession && $restaurant->getLibelle() === $this->session->get('restaurant')) {
 
-            $allPlats = $this->session->get('allPlats');
+            $commandeSession = $this->session->get('commandeSession');
 
             $commandeDetails = new CommandeDetails();
             $commandeDetails->setPlats($plat);
             $commandeDetails->setPrix($plat->getPrix());
 
-            $allPlats[$plat->getId()] = $commandeDetails;
-            $this->session->set('allPlats', $allPlats);
+            $commandeSession[$plat->getId()] = $commandeDetails;
+            $this->session->set('commandeSession', $commandeSession);
+            $this->addFlash('success', $plat->getLibelle() . ' a été ajouté au panier 🛒');
             return $this->render('restaurant/restaurant-plat.html.twig', ['restaurant' => $restaurant]);
         } else {
             $this->addFlash('warning', 'Vous pouvez commander des plats uniquement s\'ils font partis du même restaurant.');
@@ -77,12 +78,12 @@ class OrderController extends AbstractController
     {
         $user = new User();
         $user = $this->getUser();
-        $allPlats = $this->session->get('allPlats');
+        $commandeSession = $this->session->get('commandeSession');
         $solde = $user->getSolde();
         $bill = 0;
         $restaurant = '';
 
-        if ($allPlats) {
+        if ($commandeSession) {
 
             $commande = new Commande();
             $commande->setMembres($user);
@@ -90,10 +91,10 @@ class OrderController extends AbstractController
 
             $this->em->persist($commande);
 
-            foreach ($allPlats as $commandeDetails) {
+            foreach ($commandeSession as $commandeDetails) {
                 if ($restaurant === '') {
-                    $restaurant = $commandeDetails->getPlats();
-                    $restaurant = $restaurant->getRestaurant();
+                    $platCommandeDetails = $commandeDetails->getPlats();
+                    $restaurant = $platCommandeDetails->getRestaurant();
                     $restaurateur = $restaurant->getMembres();
 
                     $restaurateur = $userRepository->findBy(['id' => $restaurateur->getId()]);
@@ -110,7 +111,7 @@ class OrderController extends AbstractController
 
                 $this->em->flush();
 
-                $this->session->remove('allPlats');
+                $this->session->remove('commandeSession');
                 $this->session->remove('restaurant');
 
                 $message = (new Swift_Message('Nouvelle Commande'))
@@ -135,22 +136,22 @@ class OrderController extends AbstractController
      */
     public function deletePlatOrder(Plat $plat)
     {
-        $allPlats = $this->session->get('allPlats');
+        $commandeSession = $this->session->get('commandeSession');
 
-        if ($allPlats) {
-            foreach ($allPlats as $platDelete) {
-                $platDeleteId = $platDelete->getPlats()->getId();
+        if ($commandeSession) {
+            foreach ($commandeSession as $commandeDetailsDelete) {
+                $commandeDetailsDeleteId = $commandeDetailsDelete->getPlats()->getId();
 
-                if ($platDeleteId === $plat->getId()) {
-                    unset($allPlats[$platDeleteId]);
-                    $this->session->set('allPlats', $allPlats);
-                    $allPlats = $this->session->get('allPlats');
+                if ($commandeDetailsDeleteId === $plat->getId()) {
+                    unset($commandeSession[$commandeDetailsDeleteId]);
+                    $this->session->set('commandeSession', $commandeSession);
+                    $commandeSession = $this->session->get('commandeSession');
                 }
             }
-            if ($allPlats) {
-                return $this->render('order/index.html.twig', ['plats' => $allPlats]);
+            if ($commandeSession) {
+                return $this->render('order/index.html.twig', ['commandeSession' => $commandeSession]);
             } else {
-                $this->session->remove('allPlats');
+                $this->session->remove('commandeSession');
                 $this->session->remove('restaurant');
                 return $this->redirectToRoute('restaurants_liste');
             }

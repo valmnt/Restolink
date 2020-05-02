@@ -24,7 +24,7 @@
 
 <div id="contain_alert">
     {% for message in app.flashes('warning') %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="aler_warning">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alert_warning">
             {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -49,4 +49,5 @@
         </div>
     {% endif %}
 {% endfor %}
+{% include "restaurant/shop.html.twig" %}
 {% endblock %}

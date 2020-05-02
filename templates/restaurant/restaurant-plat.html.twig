@@ -6,24 +6,34 @@
 
 {% block body %}
 <style>
-.order {
-    position: fixed;
-    bottom: 30px;
-    z-index: 1000;
-    font-size: 50px;
-    right: 30px;   
-    border: solid 2px transparent;
-    border-radius: 50px;
+#contain_alert {
+    with: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.order:hover {
-    cursor: pointer;  
-    background-color: gray;     
+#alert_success {
+    text-align: center;
+    with: 50%;
 }
 </style>
 
 <h1 class="title-background-grey text-center">
     {{restaurant.libelle|title}}
 </h1>
+
+<div id="contain_alert">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert_success">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 <div class="container">
 
     {% for plat in restaurant.plats %}
@@ -42,6 +52,5 @@
         {% endif %}
     {% endfor %}
 </div>
-
-<a href="{{ path('plat_order') }}" style="text-decoration: none;"><div class="order">🛒<div></a>
+{% include "restaurant/shop.html.twig" %}
 {% endblock %}
