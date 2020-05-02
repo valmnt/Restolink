@@ -94,9 +94,9 @@ class OrderController extends AbstractController
                 if ($restaurant === '') {
                     $restaurant = $commandeDetails->getPlats();
                     $restaurant = $restaurant->getRestaurant();
-                    $membre = $restaurant->getMembres();
+                    $restaurateur = $restaurant->getMembres();
 
-                    $membre = $userRepository->findBy(['id' => $membre->getId()]);
+                    $restaurateur = $userRepository->findBy(['id' => $restaurateur->getId()]);
                 }
                 $bill += $commandeDetails->getPrix();
                 $commandeDetails = $commandeDetails->setCommande($commande);
@@ -115,8 +115,8 @@ class OrderController extends AbstractController
 
                 $message = (new Swift_Message('Nouvelle Commande'))
                     ->setFrom('valentinmont8@gmail.com')
-                    ->setTo($membre[0]->getEmail())
-                    ->setBody('Bonjour ' . $membre[0]->getNom() . ', Nous vous informons qu\'une nouvelle commande a été passé dans votre restaurant. Pour avoir le detail, nous vous invitons à vous connecter sur la plateforme. L\'équipe Restolink');
+                    ->setTo($restaurateur[0]->getEmail())
+                    ->setBody('Bonjour ' . $restaurateur[0]->getNom() . ', Nous vous informons qu\'une nouvelle commande a été passé dans votre restaurant. Pour avoir le detail, nous vous invitons à vous connecter sur la plateforme. L\'équipe Restolink');
 
                 $swift_Mailer->send($message);
                 return $this->redirectToRoute('user');
