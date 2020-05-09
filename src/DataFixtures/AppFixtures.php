@@ -50,7 +50,6 @@ class AppFixtures extends Fixture
                 ->setPassword($this->userPasswordEncoderInterface->encodePassword($user, 'restolink'))
                 ->setRoles(['ROLE_RESTAURATEUR']);
             $manager->persist($user);
-
             $resto->setDescription($faker->text())
                 ->setLibelle($faker->word())
                 ->setImage('https://source.unsplash.com/random/400x300')
@@ -67,8 +66,15 @@ class AppFixtures extends Fixture
             }
         }
 
-        $this->roleUser($faker, ['ROLE_ADMIN'], $manager);
-        $this->roleUser($faker, ['ROLE_USER'], $manager);
+        // $this->roleUser($faker, ['ROLE_ADMIN'], $manager);
+        // $this->roleUser($faker, ['ROLE_USER'], $manager);
+        $user->setEmail('admin@admin.com')
+                ->setNom('admin')
+                ->setPrenom('admin')
+                ->setAdressePostal('Adresse admin')
+                ->setPassword($this->userPasswordEncoderInterface->encodePassword($user, 'restolink'))
+                ->setRoles(['ROLE_ADMIN']);
+        $manager->persist($user);
 
         $manager->flush();
     }

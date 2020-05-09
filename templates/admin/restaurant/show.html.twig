@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    {{ parent() }} - Restaurant
+{% endblock %}
+
+{% block body %}
+    <h1>Restaurant</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ restaurant.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ restaurant.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ restaurant.description }}</td>
+            </tr>
+            <tr>
+                <th>IsValide</th>
+                <td>{{ restaurant.isValide ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ restaurant.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_restaurant_index') }}">back to list</a>
+
+    <a href="{{ path('admin_restaurant_edit', {'id': restaurant.id}) }}">edit</a>
+
+    {{ include('admin/restaurant/_delete_form.html.twig') }}
+{% endblock %}
