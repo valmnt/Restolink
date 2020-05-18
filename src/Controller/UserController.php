@@ -115,7 +115,6 @@ class UserController extends AbstractController
             $userVerificator->setSolde($solde);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManagerInterface->flush();
-                $role = $userVerificator->getRoles();
                 return $this->redirectToRoute('user');
             }
         } else if (!$passwordValid && $formPassword !== '') {
