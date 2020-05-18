@@ -2,9 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Plat;
 use App\Entity\Restaurant;
+use App\Form\PlatType;
 use App\Form\RestaurantType;
 use App\Repository\RestaurantRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RestaurantAdminController extends AbstractController
 {
+    private $em;
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("/", name="restaurant_index", methods={"GET"})
      */
@@ -79,16 +89,63 @@ class RestaurantAdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="restaurant_delete", methods={"DELETE"})
+     * @Route("/{id}/plats/delete/{plat_id}", name="delete_plat_restaurant")
+     * @ParamConverter("plat", options={"id" = "plat_id"})
      */
-    public function delete(Request $request, Restaurant $restaurant): Response
+    public function deletePlat(Restaurant $restaurant, Plat $plat)
     {
-        if ($this->isCsrfTokenValid('delete'.$restaurant->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($restaurant);
-            $entityManager->flush();
+        $this->em->remove($plat);
+        $this->em->flush();
+        return $this->redirectToRoute('admin_restaurant_show', ['id' => $restaurant->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/plats/add", name="add_plat_restaurateur")
+     */
+    public function addPlat(Restaurant $restaurant, Request $request)
+    {
+        $plat = new Plat();
+        $form = $this->createForm(PlatType::class, $plat);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plat->setRestaurant($restaurant);
+            $this->em->persist($plat);
+            $this->em->flush();
+            return $this->redirectToRoute('admin_restaurant_show', ['id' => $restaurant->getId()]);
         }
 
+        return $this->render('admin/restaurant/edit-plat.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="delete_restaurant")
+     */
+    public function deleteRestaurant(Restaurant $restaurant)
+    {
+        $this->em->remove($restaurant);
+        $this->em->flush();
         return $this->redirectToRoute('admin_restaurant_index');
+    }
+
+    /**
+     * @Route("/{id}/plats/edit/{plat_id}", name="edit_plat_restaurant")
+     * @ParamConverter("plat", options={"id" = "plat_id"})
+     */
+    public function editPlat(Restaurant $restaurant,Plat $plat, Request $request)
+    {
+        $form = $this->createForm(PlatType::class, $plat);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+            return $this->redirectToRoute('admin_restaurant_show', ['id' => $restaurant->getId()]);
+        }
+
+        return $this->render('admin/restaurant/edit-plat.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

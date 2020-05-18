@@ -1,5 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-admin.html.twig' %}
 
+{% block title %}
+    {{ parent() }} - Users
+{% endblock %}
 
 {% block body %}
     <h1>User index</h1>
@@ -10,7 +13,6 @@
                 <th>Id</th>
                 <th>Email</th>
                 <th>Roles</th>
-                <th>Password</th>
                 <th>AdressePostal</th>
                 <th>Solde</th>
                 <th>Nom</th>
@@ -24,7 +26,6 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
                 <td>{{ user.adressePostal }}</td>
                 <td>{{ user.solde }}</td>
                 <td>{{ user.nom }}</td>

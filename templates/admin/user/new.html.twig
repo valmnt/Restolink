@@ -1,6 +1,7 @@
-{% extends 'base.html.twig' %}
-
-<title>New User</title>
+{% extends 'base-admin.html.twig' %}
+{% block title %}
+    {{ parent() }} - New User
+{% endblock %}
 
 {% block body %}
     <h1>Create new User</h1>

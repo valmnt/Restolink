@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-admin.html.twig' %}
 
 
 {% block title %}
@@ -8,37 +8,30 @@
 {% block body %}
     <h1>Restaurant index</h1>
 
-    <table class="table">
+<div class="container">
+  <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>Description</th>
-                <th>IsValide</th>
-                <th>Image</th>
-                <th>actions</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Editer</th>
+                <th scope="col">Supprimer</th>
             </tr>
         </thead>
         <tbody>
-        {% for restaurant in restaurants %}
-            <tr>
-                <td>{{ restaurant.id }}</td>
-                <td>{{ restaurant.libelle }}</td>
-                <td>{{ restaurant.description }}</td>
-                <td>{{ restaurant.isValide ? 'Yes' : 'No' }}</td>
-                <td>{{ restaurant.image }}</td>
-                <td>
-                    <a href="{{ path('admin_restaurant_show', {'id': restaurant.id}) }}">show</a>
-                    <a href="{{ path('admin_restaurant_edit', {'id': restaurant.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+    {% for restaurant in restaurants %}
+        <tr>
+            <td>{{restaurant.libelle}}</td>
+            <td>{{restaurant.description}}</td>
+            <td><img style="height: 100px;" src="{{restaurant.image}}"></td>
+            <td><a class="" href="{{path('admin_restaurant_show', {'id': restaurant.id})}}">Editer</a></td>
+            <td><a class="" href="{{path('admin_delete_restaurant', {'id': restaurant.id})}}">Supprimer</a></td>
+        </tr>
+    {% endfor %}
+       </tbody>
     </table>
+</div>
 
     <a href="{{ path('admin_restaurant_new') }}">Create new</a>
 {% endblock %}

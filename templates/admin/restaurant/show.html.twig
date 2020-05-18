@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-admin.html.twig' %}
 
 
 {% block title %}
@@ -6,36 +6,35 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Restaurant</h1>
 
-    <table class="table">
+<div style="padding-left: 90%;">
+    <a href="{{ path('admin_add_plat_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Ajouter un plat</button></a>
+</div>
+<div style="padding-left: 90%;">
+    <a href="{{ path('admin_restaurant_edit', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Editer les informations du restaurant</button></a>
+</div>
+<div class="container">
+  <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Image</th>
+                <th scope="col">Editer</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ restaurant.id }}</td>
-            </tr>
-            <tr>
-                <th>Libelle</th>
-                <td>{{ restaurant.libelle }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ restaurant.description }}</td>
-            </tr>
-            <tr>
-                <th>IsValide</th>
-                <td>{{ restaurant.isValide ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ restaurant.image }}</td>
-            </tr>
-        </tbody>
+    {% for plat in restaurant.plats %}
+        <tr>
+            <td>{{plat.libelle}}</td>
+            <td>{{plat.prix}} €</td>
+            <td><img style="height: 100px;" src="{{plat.image}}"></td>
+            <td><a class="" href="{{path('admin_edit_plat_restaurant', {'id': restaurant.id ,'plat_id': plat.id})}}">Editer</a></td>
+            <td><a class="" href="{{path('admin_delete_plat_restaurant', {'id': restaurant.id ,'plat_id': plat.id})}}">Supprimer</a></td>
+        </tr>
+    {% endfor %}
+       </tbody>
     </table>
-
-    <a href="{{ path('admin_restaurant_index') }}">back to list</a>
-
-    <a href="{{ path('admin_restaurant_edit', {'id': restaurant.id}) }}">edit</a>
-
-    {{ include('admin/restaurant/_delete_form.html.twig') }}
+</div>
 {% endblock %}
