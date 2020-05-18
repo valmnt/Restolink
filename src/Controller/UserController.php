@@ -111,7 +111,8 @@ class UserController extends AbstractController
         $passwordValid = $this->userPasswordEncoderInterface->isPasswordValid($userVerificator, $formPassword);
 
         if ($passwordValid) {
-            $userVerificator->setSolde($userForm->getSolde());
+            $solde = $userForm->getSolde() + $userVerificator->getSolde();
+            $userVerificator->setSolde($solde);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManagerInterface->flush();
                 $role = $userVerificator->getRoles();
