@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\EditUserType;
 use App\Form\WalletType;
+use App\Repository\PlatRepository;
+use App\Repository\RestaurantRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,13 +28,32 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="user")
      */
-    public function index()
+    public function index(PlatRepository $platRepository, RestaurantRepository $restaurantRepository)
     {
+        $arrayAllCommandeDetails = [];
+        $commandeDetails = [];
         $user = $this->getUser();
+        $commandes = $user->getCommandes();
+
+        foreach ($commandes as $commande) {
+            $commandeDetailsLocal = $commande->getCommandeDetails();
+            foreach ($commandeDetailsLocal as $commandeDetail) {
+                $commandeDetailPlat = $commandeDetail->getPlats();
+                $commandeDetailRestaurant = $commandeDetailPlat->getRestaurant();
+                $restaurantRepository->findBy(['id' => $commandeDetailRestaurant->getId()]);
+                $platRepository->findBy(['id' => $commandeDetailPlat->getId()]);
+                array_push($commandeDetails, $commandeDetailPlat);
+            }
+            array_push($arrayAllCommandeDetails, $commandeDetails);
+            $commandeDetails = [];
+        }
+
         $role = $user->getRoles();
         return $this->render('user/index.html.twig', [
             'user' => $user,
-            'role' => $role
+            'role' => $role,
+            'commandeDetails' => $arrayAllCommandeDetails,
+            'restaurant' => $commandeDetailRestaurant,
         ]);
     }
 
@@ -94,7 +115,7 @@ class UserController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManagerInterface->flush();
                 $role = $userVerificator->getRoles();
-                return $this->render('user/index.html.twig', ['user' => $userVerificator, 'role' => $role]);
+                return $this->redirectToRoute('user');
             }
         } else if (!$passwordValid && $formPassword !== '') {
             $this->addFlash('danger', 'Mot de passe incorrect 😭');
