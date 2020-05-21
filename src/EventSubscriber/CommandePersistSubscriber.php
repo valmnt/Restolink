@@ -7,9 +7,8 @@ use DateInterval;
 use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
-use Swift_Mailer;
-use Swift_Message;
 
 class CommandePersistSubscriber implements EventSubscriber
 {
@@ -32,6 +31,8 @@ class CommandePersistSubscriber implements EventSubscriber
             $object->setDateReception($dateRecpetion);
 
             $object->setStatus(0);
+
+            $object->setFraisLivraison(2.5);
         }
     }
 }

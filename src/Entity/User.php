@@ -53,7 +53,7 @@ class User implements UserInterface
     private $adressePostal;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      * @Assert\PositiveOrZero
      */
     private $solde;
@@ -174,12 +174,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getSolde(): ?int
+    public function getSolde(): ?float
     {
         return $this->solde;
     }
 
-    public function setSolde(?int $solde): self
+    public function setSolde(?float $solde): self
     {
         $this->solde = $solde;
 

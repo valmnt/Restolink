@@ -19,6 +19,7 @@ class OrderController extends AbstractController
 {
     private $session;
     private $em;
+    private $fraisLivraison = 2.5;
 
     public function __construct(SessionInterface $session, EntityManagerInterface $em)
     {
@@ -112,7 +113,7 @@ class OrderController extends AbstractController
 
             if ($solde >= $bill) {
 
-                $solde = $solde - $bill;
+                $solde = $solde - $bill - $this->fraisLivraison;
                 $user->setSolde($solde);
 
                 $this->em->flush();

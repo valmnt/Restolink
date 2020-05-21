@@ -55,6 +55,11 @@ class Commande
      */
     private $restaurant;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $fraisLivraison;
+
     public function __construct()
     {
         $this->commandeDetails = new ArrayCollection();
@@ -164,6 +169,18 @@ class Commande
     public function setRestaurant(?Restaurant $restaurant): self
     {
         $this->restaurant = $restaurant;
+
+        return $this;
+    }
+
+    public function getFraisLivraison(): ?float
+    {
+        return $this->fraisLivraison;
+    }
+
+    public function setFraisLivraison(float $fraisLivraison): self
+    {
+        $this->fraisLivraison = $fraisLivraison;
 
         return $this;
     }

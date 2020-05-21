@@ -36,29 +36,32 @@ class UserController extends AbstractController
         $user = $this->getUser();
         $commandes = $user->getCommandes();
 
-        foreach ($commandes as $commande) {
-            $commandeDetailsLocal = $commande->getCommandeDetails();
-            $commandeStatus[] = $commande->getStatus();
-            foreach ($commandeDetailsLocal as $commandeDetail) {
-                $commandeDetailPlat = $commandeDetail->getPlats();
-                $commandeDetailRestaurant = $commandeDetailPlat->getRestaurant();
-                $restaurantRepository->findBy(['id' => $commandeDetailRestaurant->getId()]);
-                $platRepository->findBy(['id' => $commandeDetailPlat->getId()]);
+        if ($commandes) {
+            foreach ($commandes as $commande) {
+                $commandeDetailsLocal = $commande->getCommandeDetails();
+                $commandeStatus[] = $commande->getStatus();
+                foreach ($commandeDetailsLocal as $commandeDetail) {
+                    $commandeDetailPlat = $commandeDetail->getPlats();
+                    $commandeDetailRestaurant = $commandeDetailPlat->getRestaurant();
+                    $restaurantRepository->findBy(['id' => $commandeDetailRestaurant->getId()]);
+                    $platRepository->findBy(['id' => $commandeDetailPlat->getId()]);
 
-                array_push($commandeDetails, $commandeDetailPlat);
+                    array_push($commandeDetails, $commandeDetailPlat);
+                }
+                array_push($arrayAllCommandeDetails, $commandeDetails);
+                $commandeDetails = [];
             }
-            array_push($arrayAllCommandeDetails, $commandeDetails);
-            $commandeDetails = [];
-        }
 
-        $role = $user->getRoles();
-        return $this->render('user/index.html.twig', [
-            'user' => $user,
-            'role' => $role,
-            'commandeDetails' => $arrayAllCommandeDetails,
-            'restaurant' => $commandeDetailRestaurant,
-            'status' => $commandeStatus
-        ]);
+            $role = $user->getRoles();
+            return $this->render('user/index.html.twig', [
+                'user' => $user,
+                'role' => $role,
+                'commandeDetails' => $arrayAllCommandeDetails,
+                'status' => $commandeStatus
+            ]);
+        } else {
+            return $this->render('user/index.html.twig');
+        }
     }
 
     /**

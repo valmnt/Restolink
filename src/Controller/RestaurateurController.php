@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Commande;
 use App\Entity\Plat;
 use App\Entity\Restaurant;
 use App\Entity\User;
 use App\Form\PlatType;
 use App\Form\RestaurantType;
+use App\Repository\PlatRepository;
+use App\Repository\RestaurantRepository;
 use App\Utils\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -93,10 +96,12 @@ class RestaurateurController extends AbstractController
     {
         $user = $this->getUser();
         if ($this->isRestaurantRestaurateur($user, $restaurant)) {
-            return $this->render('restaurateur/restaurant.html.twig', [
-                'user' => $user,
-                'restaurant' => $restaurant,
-            ]
+            return $this->render(
+                'restaurateur/restaurant.html.twig',
+                [
+                    'user' => $user,
+                    'restaurant' => $restaurant,
+                ]
             );
         }
         return new Response("Vous n'êtes pas autorisé", 403);
@@ -161,7 +166,7 @@ class RestaurateurController extends AbstractController
      * @Route("/{id}/plats/edit/{plat_id}", name="edit_plat_restaurateur")
      * @ParamConverter("plat", options={"id" = "plat_id"})
      */
-    public function editPlat(Restaurant $restaurant,Plat $plat, Request $request)
+    public function editPlat(Restaurant $restaurant, Plat $plat, Request $request)
     {
         $user = $this->getUser();
         if ($this->isRestaurantRestaurateur($user, $restaurant)) {
@@ -179,7 +184,7 @@ class RestaurateurController extends AbstractController
         }
         return new Response("Vous n'êtes pas autorisé", 403);
     }
-    
+
     /**
      * A implémenter dans un voter
      * https://symfony.com/doc/current/security/voters.html
@@ -191,5 +196,50 @@ class RestaurateurController extends AbstractController
             return true;
         }
         return false;
+    }
+
+    /**
+     * @Route("/valid-commande/{id}", name="valid-command")
+     */
+    public function validcommand(Restaurant $restaurant, PlatRepository $platRepository, RestaurantRepository $restaurantRepository)
+    {
+        $commandesID = [];
+        $commandeStatus = [];
+        $arrayAllCommandeDetails = [];
+        $commandeDetails = [];
+        $commandes = $restaurant->getCommandes();
+
+        foreach ($commandes as $commande) {
+            $commandeDetailsLocal = $commande->getCommandeDetails();
+            $commandeStatus[] = $commande->getStatus();
+            $commandesID[] = $commande->getId();
+            foreach ($commandeDetailsLocal as $commandeDetail) {
+                $commandeDetailPlat = $commandeDetail->getPlats();
+                $commandeDetailRestaurant = $commandeDetailPlat->getRestaurant();
+                $restaurantRepository->findBy(['id' => $commandeDetailRestaurant->getId()]);
+                $platRepository->findBy(['id' => $commandeDetailPlat->getId()]);
+
+                array_push($commandeDetails, $commandeDetailPlat);
+            }
+            array_push($arrayAllCommandeDetails, $commandeDetails);
+            $commandeDetails = [];
+        }
+
+        return $this->render('restaurateur/valid-command.html.twig', [
+            'commandeDetails' => $arrayAllCommandeDetails,
+            'restaurant' => $commandeDetailRestaurant,
+            'status' => $commandeStatus,
+            'commandesID' => $commandesID
+        ]);
+    }
+
+    /**
+     * @Route("/update-status/{id}", name="update-status")
+     */
+    public function updateStatusCommande(Commande $commande)
+    {
+        $commande->setStatus(1);
+        $this->em->flush();
+        return $this->redirectToRoute('mes_restaurants');
     }
 }

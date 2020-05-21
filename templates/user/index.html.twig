@@ -32,6 +32,7 @@
     </div>
   </div>
 
+{% if commandeDetails %}
   <h1>Historique des commandes</h1>
   <div class="container">
     {% for commandeDetail in commandeDetails %}
@@ -49,4 +50,5 @@
     </ul>
     {% endfor %}
   </div>
+{% endif %}
 {% endblock %}
