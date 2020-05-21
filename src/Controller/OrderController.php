@@ -6,6 +6,7 @@ use App\Entity\Commande;
 use App\Entity\CommandeDetails;
 use App\Entity\Plat;
 use App\Entity\User;
+use App\Repository\RestaurantRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Swift_Mailer;
@@ -74,30 +75,29 @@ class OrderController extends AbstractController
     /**
      * @Route("/order_bdd", name="commande_plat_order")
      */
-    public function setCommandeBdd(UserRepository $userRepository, Swift_Mailer $swift_Mailer)
+    public function setCommandeBdd(UserRepository $userRepository, Swift_Mailer $swift_Mailer, RestaurantRepository $restaurantRepository)
     {
         $user = new User();
         $user = $this->getUser();
         $commandeSession = $this->session->get('commandeSession');
         $solde = $user->getSolde();
         $bill = 0;
-        $restaurant = '';
+        $restaurateur = '';
         $platsName = [];
+        $restaurant = $restaurantRepository->findBy(['libelle' => $this->session->get('restaurant')]);
 
         if ($commandeSession) {
 
             $commande = new Commande();
             $commande->setMembres($user);
             $commande->setAdresse($user->getAdressePostal());
-
+            $commande->setRestaurant($restaurant[0]);
             $this->em->persist($commande);
 
             foreach ($commandeSession as $commandeDetails) {
-                if ($restaurant === '') {
-                    $platCommandeDetails = $commandeDetails->getPlats();
-                    $restaurant = $platCommandeDetails->getRestaurant();
-                    $restaurateur = $restaurant->getMembres();
+                if ($restaurateur === '') {
 
+                    $restaurateur = $restaurant[0]->getMembres();
                     $restaurateur = $userRepository->findBy(['id' => $restaurateur->getId()]);
                 }
                 $bill += $commandeDetails->getPrix();

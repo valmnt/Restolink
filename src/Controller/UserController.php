@@ -30,6 +30,7 @@ class UserController extends AbstractController
      */
     public function index(PlatRepository $platRepository, RestaurantRepository $restaurantRepository)
     {
+        $commandeStatus = [];
         $arrayAllCommandeDetails = [];
         $commandeDetails = [];
         $user = $this->getUser();
@@ -37,11 +38,13 @@ class UserController extends AbstractController
 
         foreach ($commandes as $commande) {
             $commandeDetailsLocal = $commande->getCommandeDetails();
+            $commandeStatus[] = $commande->getStatus();
             foreach ($commandeDetailsLocal as $commandeDetail) {
                 $commandeDetailPlat = $commandeDetail->getPlats();
                 $commandeDetailRestaurant = $commandeDetailPlat->getRestaurant();
                 $restaurantRepository->findBy(['id' => $commandeDetailRestaurant->getId()]);
                 $platRepository->findBy(['id' => $commandeDetailPlat->getId()]);
+
                 array_push($commandeDetails, $commandeDetailPlat);
             }
             array_push($arrayAllCommandeDetails, $commandeDetails);
@@ -54,6 +57,7 @@ class UserController extends AbstractController
             'role' => $role,
             'commandeDetails' => $arrayAllCommandeDetails,
             'restaurant' => $commandeDetailRestaurant,
+            'status' => $commandeStatus
         ]);
     }
 

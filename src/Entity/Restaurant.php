@@ -44,9 +44,15 @@ class Restaurant extends EntityImage
      */
     private $membres;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Commande", mappedBy="restaurant", orphanRemoval=true)
+     */
+    private $commandes;
+
     public function __construct()
     {
         $this->plats = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +135,37 @@ class Restaurant extends EntityImage
     public function setMembres(?User $membres): self
     {
         $this->membres = $membres;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commande[]
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
+            $commande->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->contains($commande)) {
+            $this->commandes->removeElement($commande);
+            // set the owning side to null (unless already changed)
+            if ($commande->getRestaurant() === $this) {
+                $commande->setRestaurant(null);
+            }
+        }
 
         return $this;
     }

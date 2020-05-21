@@ -30,6 +30,8 @@ class CommandePersistSubscriber implements EventSubscriber
             $dateRecpetion = new DateTime();
             $dateRecpetion->add(new DateInterval('PT1H'));
             $object->setDateReception($dateRecpetion);
+
+            $object->setStatus(0);
         }
     }
 }
