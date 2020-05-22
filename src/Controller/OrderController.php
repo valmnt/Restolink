@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Commande\CommandeParameter;
 use App\Entity\Commande;
 use App\Entity\CommandeDetails;
 use App\Entity\Plat;
@@ -19,7 +20,6 @@ class OrderController extends AbstractController
 {
     private $session;
     private $em;
-    private $fraisLivraison = 2.5;
 
     public function __construct(SessionInterface $session, EntityManagerInterface $em)
     {
@@ -76,7 +76,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/order_bdd", name="commande_plat_order")
      */
-    public function setCommandeBdd(UserRepository $userRepository, Swift_Mailer $swift_Mailer, RestaurantRepository $restaurantRepository)
+    public function setCommandeBdd(UserRepository $userRepository, Swift_Mailer $swift_Mailer, RestaurantRepository $restaurantRepository, CommandeParameter $commandeParameter)
     {
         $user = new User();
         $user = $this->getUser();
@@ -111,9 +111,11 @@ class OrderController extends AbstractController
                 $this->em->merge($commandeDetails);
             }
 
+            $bill = $bill + $commandeParameter->getFraislivraison();
+
             if ($solde >= $bill) {
 
-                $solde = $solde - $bill - $this->fraisLivraison;
+                $solde = $solde - $bill;
                 $user->setSolde($solde);
 
                 $this->em->flush();

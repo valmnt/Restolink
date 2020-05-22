@@ -31,7 +31,9 @@
         <li class="list-group-item" style="height: 150px; text-align: center;"> - {{localCommandeDetail.libelle}} {{localCommandeDetail.prix}}€ <img class="img" src="{{localCommandeDetail.image}}">
         </li>
       {% endfor %}
+      {% if status[loop.index - 1] == false %}
         <a href="{{path('update-status', {'id': commandesID[loop.index - 1]})}}"><button type="button" class="btn btn-outline-success" style="width: 100%;">Valider</button></a>
+      {% endif %}
     </ul>
     {% endfor %}
   </div>

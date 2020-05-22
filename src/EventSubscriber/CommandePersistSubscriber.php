@@ -2,12 +2,12 @@
 
 namespace App\EventSubscriber;
 
+use App\Commande\CommandeParameter;
 use App\Entity\Commande;
 use DateInterval;
 use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 
 class CommandePersistSubscriber implements EventSubscriber
@@ -32,7 +32,8 @@ class CommandePersistSubscriber implements EventSubscriber
 
             $object->setStatus(0);
 
-            $object->setFraisLivraison(2.5);
+            $commandeParameter = new CommandeParameter();
+            $object->setFraisLivraison($commandeParameter->getFraislivraison());
         }
     }
 }
