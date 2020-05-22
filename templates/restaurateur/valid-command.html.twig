@@ -20,7 +20,7 @@
   <div class="container">
     {% for commandeDetail in commandeDetails %}
     <ul class="list-group" style="margin: 2%;">
-      <li class="list-group-item active" style="text-align: center;">Commande effectuée à {{ commandeDetail[0].restaurant.libelle }} | 
+      <li class="list-group-item active" style="text-align: center;">Commande effectuée à {{ commandeDetail[0].restaurant.libelle }} par {{commandeMembers[loop.index - 1]}} | 
       {% if status[loop.index - 1] == false %}
         <p>En cours de préparation ... 🟠</p>
       {% else %}

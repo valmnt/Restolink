@@ -204,6 +204,7 @@ class RestaurateurController extends AbstractController
     public function validcommand(Restaurant $restaurant, PlatRepository $platRepository, RestaurantRepository $restaurantRepository)
     {
         $commandesID = [];
+        $commandeMembers = [];
         $commandeStatus = [];
         $arrayAllCommandeDetails = [];
         $commandeDetails = [];
@@ -213,6 +214,7 @@ class RestaurateurController extends AbstractController
             $commandeDetailsLocal = $commande->getCommandeDetails();
             $commandeStatus[] = $commande->getStatus();
             $commandesID[] = $commande->getId();
+            $commandeMembers[] = $commande->getMembres()->getNom();
             foreach ($commandeDetailsLocal as $commandeDetail) {
                 $commandeDetailPlat = $commandeDetail->getPlats();
                 $commandeDetailRestaurant = $commandeDetailPlat->getRestaurant();
@@ -229,7 +231,8 @@ class RestaurateurController extends AbstractController
             'commandeDetails' => $arrayAllCommandeDetails,
             'restaurant' => $commandeDetailRestaurant,
             'status' => $commandeStatus,
-            'commandesID' => $commandesID
+            'commandesID' => $commandesID,
+            'commandeMembers' => $commandeMembers
         ]);
     }
 
