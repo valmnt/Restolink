@@ -39,7 +39,7 @@
         <div class="row">
     {% endif %}
 
-    {% include "restaurant/item-restaurant.html.twig" with {'image': restaurant.image, 'libelle': restaurant.libelle, 'description': restaurant.description, 'id': restaurant.id } %}
+    {% include "restaurant/item-restaurant.html.twig" with {'image': restaurant.image, 'libelle': restaurant.libelle, 'description': restaurant.description, 'id': restaurant.id, 'adresse': restaurant.adresse } %}
 
     {% if loop.index % 3 == 0 %}
         </div><div class="row">

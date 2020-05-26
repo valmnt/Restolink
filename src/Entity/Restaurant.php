@@ -49,6 +49,11 @@ class Restaurant extends EntityImage
      */
     private $commandes;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $adresse;
+
     public function __construct()
     {
         $this->plats = new ArrayCollection();
@@ -166,6 +171,18 @@ class Restaurant extends EntityImage
                 $commande->setRestaurant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

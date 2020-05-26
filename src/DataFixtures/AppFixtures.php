@@ -52,6 +52,8 @@ class AppFixtures extends Fixture
             $manager->persist($user);
             $resto->setDescription($faker->text())
                 ->setLibelle($faker->word())
+                ->setAdresse($faker->address())
+                ->setIsValide($faker->boolean(80))
                 ->setImage('https://source.unsplash.com/random/400x300')
                 ->setMembres($user);
             $manager->persist($resto);

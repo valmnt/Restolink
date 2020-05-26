@@ -17,10 +17,13 @@
     with: 50%;
 }
 </style>
-
-<h1 class="title-background-grey text-center">
-    {{restaurant.libelle|title}}
-</h1>
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3 my-5">{{restaurant.libelle|title}}</h1>
+      <p><b>Description :</b> {{restaurant.description}}</p>
+      <p><b>Adresse Postal :</b> {{restaurant.adresse}}</p>
+    </div>
+  </div>
 
 <div id="contain_alert">
     {% for message in app.flashes('success') %}
