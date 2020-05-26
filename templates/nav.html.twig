@@ -21,7 +21,7 @@
           <a {{ app.request.attributes.get('_route') == 'app_login' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_login') }}">Connexion</a>
           <a {{ app.request.attributes.get('_route') == 'app_register' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} class="nav-item nav-link" href="{{ path('app_register') }}">Inscription</a>
       {% endif %}
-        
+      <a class="nav-item nav-link" href="{{ path('contact') }}">Contact</a>
       </div>
     </div>
 </nav>

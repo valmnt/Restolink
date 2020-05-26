@@ -8,6 +8,7 @@
         <a {{ app.request.attributes.get('_route') == 'index' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} href="{{ path('index') }}">Accueil</a>
       
         <a class="nav-item nav-link" href="{{ path('admin_restaurant_index') }}">Restaurants</a>
+        <a class="nav-item nav-link" href="{{ path('admin_messages') }}">Messages</a>
       {% if app.user %}
         <a class="nav-item nav-link" href="{{ path('admin_user_index') }}">Utilisateurs</a>
         <a class="nav-item nav-link" href="{{ path('restaurants_liste') }}">Retour au site</a>
