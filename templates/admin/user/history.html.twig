@@ -1,0 +1,45 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}
+    Historique
+{% endblock %}
+
+{% block body %}
+<style>
+  .img {
+    width: 150px;
+    heigth: 150px;
+    position: absolute;
+    right: 5px
+  }
+  h1 {
+    text-align: center;
+    margin: 2%;
+  }
+</style>
+
+{% if commandeDetails %}
+  <h1>Historique des commandes</h1>
+  <div class="container">
+    {% for commandeDetail in commandeDetails %}
+    <ul class="list-group" style="margin: 2%;">
+      <li class="list-group-item active" style="text-align: center;">Commande effectuée à {{ commandeDetail[0].restaurant.libelle }} | 
+      {% if status[loop.index - 1] == false %}
+        <p>En cours de préparation ... 🟠</p>
+      {% else %}
+        <p>Commande livrée 🟢</p>
+      {% endif %}
+      </li>
+      {% for localCommandeDetail in commandeDetail %}
+        <li class="list-group-item" style="height: 150px; text-align: center;"> - {{localCommandeDetail.libelle}} {{localCommandeDetail.prix}}€ <img class="img" src="{{localCommandeDetail.image}}"></li>
+      {% endfor %}
+    </ul>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="jumbotron mt-3">
+    <h1>Aucunes Commandes ⛔</h1>
+  </div>
+{% endif %}
+
+{% endblock %}

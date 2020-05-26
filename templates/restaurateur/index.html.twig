@@ -21,16 +21,18 @@
                 <th scope="col">Image</th>
                 <th scope="col">Editer</th>
                 <th scope="col">Supprimer</th>
+                <th scope="col">Commandes</th>
             </tr>
         </thead>
         <tbody>
     {% for restaurant in user.restaurants %}
         <tr>
-            <td><a href="{{path('valid-command', {'id': restaurant.id})}}">{{restaurant.libelle}}</a></td>
+            <td>{{restaurant.libelle}}</td>
             <td>{{restaurant.description}}</td>
             <td><img style="height: 100px;" src="{{restaurant.image}}"></td>
             <td><a class="" href="{{path('plats_restaurant_restaurateur', {'id': restaurant.id})}}">Editer</a></td>
             <td><a class="" href="{{path('delete_restaurant_restaurateur', {'id': restaurant.id})}}">Supprimer</a></td>
+            <td><a href="{{path('valid-command', {'id': restaurant.id})}}">Commandes</a></td>
         </tr>
     {% endfor %}
        </tbody>

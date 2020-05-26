@@ -229,7 +229,6 @@ class RestaurateurController extends AbstractController
 
         return $this->render('restaurateur/valid-command.html.twig', [
             'commandeDetails' => $arrayAllCommandeDetails,
-            'restaurant' => $commandeDetailRestaurant,
             'status' => $commandeStatus,
             'commandesID' => $commandesID,
             'commandeMembers' => $commandeMembers

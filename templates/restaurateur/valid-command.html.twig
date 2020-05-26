@@ -15,7 +15,7 @@
     margin: 2%;
   }
 </style>
-
+{% if commandeDetails %}
   <h1>Liste des commandes</h1>
   <div class="container">
     {% for commandeDetail in commandeDetails %}
@@ -36,5 +36,9 @@
       {% endif %}
     </ul>
     {% endfor %}
+    {% else %}
+    <div class="jumbotron mt-3">
+    <h1>Aucunes Commandes ⛔</h1>
   </div>
+{% endif %}
 {% endblock %}

@@ -6,14 +6,9 @@
 {% endblock %}
 
 {% block body %}
-
-<div style="padding-left: 90%;">
+<div class="container" style="margin-top: 2%;">
     <a href="{{ path('admin_add_plat_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Ajouter un plat</button></a>
-</div>
-<div style="padding-left: 90%;">
     <a href="{{ path('admin_restaurant_edit', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Editer les informations du restaurant</button></a>
-</div>
-<div class="container">
   <table class="table">
         <thead>
             <tr>

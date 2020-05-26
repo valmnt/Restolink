@@ -4,9 +4,13 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create new User</h1>
+    <h1 style="text-align: center;">Create new User</h1>
 
+<div class="container">
+<div class="jumbotron">
     {{ include('admin/user/_form.html.twig') }}
 
-    <a href="{{ path('admin_user_index') }}">back to list</a>
+    <a href="{{ path('admin_user_index') }}"><button type="button" class="btn btn-warning" style="margin-top: 1%;">Back to list</button></a>
+</div>
+</div>
 {% endblock %}

@@ -5,44 +5,24 @@
 {% endblock %}
 
 {% block body %}
-    <h1>User</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>AdressePostal</th>
-                <td>{{ user.adressePostal }}</td>
-            </tr>
-            <tr>
-                <th>Solde</th>
-                <td>{{ user.solde }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ user.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ user.prenom }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('admin_user_index') }}">back to list</a>
-
-    <a href="{{ path('admin_user_edit', {'id': user.id}) }}">edit</a>
+<div class="container">
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">{{user.prenom}} {{ user.nom }}</h1>
+      <p><b>🔑 Id :</b> {{ user.id }}</p>
+      <p><b>📧 Email :</b> {{ user.email }}</p>
+      <p><b>🧍 Roles :</b> {{ user.roles ? user.roles|json_encode : '' }}</p>
+      <p><b>🏠 Adresse Postal :</b> {{user.adressePostal}}</p>
+      {% if user.solde is null %}
+      <p><b>💸 Solde Actuel :</b> 0</p>
+      {% else %}
+      <p><b>💸 Solde Actuel :</b> {{user.solde}}€</p>
+      {% endif %}
+      <p><a class="btn btn-primary btn-lg" href="{{ path('admin_user_edit', {'id': user.id}) }}" role="button">✍️ Editer le profil »</a></p>
+      <p><a class="btn btn-warning btn-lg" href="{{ path('admin_user_index') }}" role="button">⬅️ Retour à la liste »</a></p>
+    </div>
+  </div>
 
     {{ include('admin/user/_delete_form.html.twig') }}
+</div>
 {% endblock %}

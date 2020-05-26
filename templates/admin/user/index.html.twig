@@ -5,8 +5,16 @@
 {% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+<style>
+.new_user {
+    font-size: 70%;
+}
+</style>
 
+<h1 style="text-align: center;">User index</h1>
+
+<div class="container">
+<a href="{{ path('admin_user_new') }}" class="new_user"><button type="button" class="btn btn-primary">➕ Create new</button></a>
     <table class="table">
         <thead>
             <tr>
@@ -33,6 +41,7 @@
                 <td>
                     <a href="{{ path('admin_user_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('admin_user_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('admin_user_history', {'id': user.id}) }}">Commandes</a>
                 </td>
             </tr>
         {% else %}
@@ -42,6 +51,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('admin_user_new') }}">Create new</a>
+</div>
 {% endblock %}

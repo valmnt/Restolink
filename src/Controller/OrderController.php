@@ -129,7 +129,7 @@ class OrderController extends AbstractController
                     ->setBody('Bonjour ' . $restaurateur[0]->getNom() . ', Nous vous informons qu\'une nouvelle commande a été passé dans votre restaurant au nom de ' . $user->getNom() . ' à l\'adresse ' . $user->getAdressePostal() . '. L\'heure de livraison est prévue pour : ' . $commande->getDateReception()->format('H:i:s') . ' Les plats commandés sont : ' . implode(', ', $platsName) . '. Pour avoir le detail, nous vous invitons à vous connecter sur la plateforme. L\'équipe Restolink');
 
                 $swift_Mailer->send($message);
-                return $this->redirectToRoute('user');
+                return $this->redirectToRoute('user', ['id' => $user->getId()]);
             } else {
                 $this->addFlash('danger', 'Oh bah le portefeuille est vide 😭');
                 return $this->redirectToRoute('plat_order');

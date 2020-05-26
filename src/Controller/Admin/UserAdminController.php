@@ -2,8 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\AbstractBaseController;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\PlatRepository;
+use App\Repository\RestaurantRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/user")
  */
-class UserAdminController extends AbstractController
+class UserAdminController extends AbstractBaseController
 {
     /**
      * @Route("/", name="user_index", methods={"GET"})
@@ -83,12 +86,20 @@ class UserAdminController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('admin_user_index');
+    }
+
+    /**
+     * @Route("/history-user/{id}", name="user_history")
+     */
+    public function getHistoryUser(PlatRepository $platRepository, RestaurantRepository $restaurantRepository, User $user)
+    {
+        return $this->getHistoricUserCommandes($platRepository, $restaurantRepository, 'admin/user/history.html.twig', 'admin/index.html.twig', $user);
     }
 }
