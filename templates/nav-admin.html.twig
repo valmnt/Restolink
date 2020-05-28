@@ -11,7 +11,7 @@
         <a class="nav-item nav-link" href="{{ path('admin_messages') }}">Messages</a>
       {% if app.user %}
         <a class="nav-item nav-link" href="{{ path('admin_user_index') }}">Utilisateurs</a>
-        <a class="nav-item nav-link" href="{{ path('restaurants_liste') }}">Retour au site</a>
+        <a class="nav-item nav-link" href="{{ path('index') }}">Retour au site</a>
         <a class="nav-item nav-link" href="{{ path('user', {'id': app.user.id}) }}">Mon Profil</a>
         <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout : {{ app.user.username }}</a>
      {% endif %}

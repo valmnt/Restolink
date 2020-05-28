@@ -37,7 +37,7 @@ class OrderController extends AbstractController
             return $this->render('order/index.html.twig', ['commandeSession' => $commandeSession]);
         } else {
             $this->addFlash('warning', 'Veuillez choisir de bons petits plats 😋');
-            return $this->redirectToRoute('restaurants_liste');
+            return $this->redirectToRoute('index');
         }
     }
 
@@ -69,7 +69,7 @@ class OrderController extends AbstractController
             return $this->render('restaurant/restaurant-plat.html.twig', ['restaurant' => $restaurant]);
         } else {
             $this->addFlash('warning', 'Vous pouvez commander des plats uniquement s\'ils font partis du même restaurant.');
-            return $this->redirectToRoute('restaurants_liste');
+            return $this->redirectToRoute('index');
         }
     }
 
@@ -135,7 +135,7 @@ class OrderController extends AbstractController
                 return $this->redirectToRoute('plat_order');
             }
         } else {
-            return $this->redirectToRoute('restaurants_liste');
+            return $this->redirectToRoute('index');
         }
     }
 
@@ -162,7 +162,7 @@ class OrderController extends AbstractController
             } else {
                 $this->session->remove('commandeSession');
                 $this->session->remove('restaurant');
-                return $this->redirectToRoute('restaurants_liste');
+                return $this->redirectToRoute('index');
             }
         }
     }

@@ -8,23 +8,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-/**
- * @Route("/restaurants")
- */
 class RestaurantController extends AbstractController
 {
-
-    private $em;
-
-    public function __contruct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-
     /**
-     * @Route("/", name="restaurants_liste")
+     * @Route("/", name="index")
      */
     public function liste(RestaurantRepository $restaurantRepository)
     {
@@ -35,7 +22,7 @@ class RestaurantController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="restaurant_unique")
+     * @Route("/restaurants/{id}", name="restaurant_unique")
      */
     public function unique(Restaurant $restaurant)
     {
