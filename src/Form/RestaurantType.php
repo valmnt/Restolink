@@ -32,6 +32,7 @@ class RestaurantType extends AbstractType
                 'label' => 'Choisissez votre Image'
             ])
             ->add('description')
+            ->add('adresse')
             ->add('Submit', SubmitType::class);
 
             $builder->get('image')

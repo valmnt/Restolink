@@ -5,7 +5,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a {{ app.request.attributes.get('_route') == 'index' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} href="{{ path('index') }}">Accueil</a>
+        <a {{ app.request.attributes.get('_route') == 'admin_index' ? 'class="nav-item nav-link active"' : 'class="nav-item nav-link"' }} href="{{ path('admin_index') }}">Accueil</a>
       
         <a class="nav-item nav-link" href="{{ path('admin_restaurant_index') }}">Restaurants</a>
         <a class="nav-item nav-link" href="{{ path('admin_messages') }}">Messages</a>

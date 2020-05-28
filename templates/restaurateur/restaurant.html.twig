@@ -3,14 +3,21 @@
 {% block title %}Mes restaurants{% endblock %}
 
 {% block body %}
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3 text-center">{{restaurant.libelle|title}}</h1>
+    </div>
+</div>
 
-<div style="padding-left: 90%;">
-    <a href="{{ path('add_plat_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Ajouter un plat</button></a>
-</div>
-<div style="padding-left: 90%;">
-    <a href="{{ path('edit_restaurant_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Editer les informations du restaurant</button></a>
-</div>
 <div class="container">
+    <div class="d-flex justify-content-between my-4">
+        <div>
+            <a href="{{ path('edit_restaurant_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Editer les informations du restaurant</button></a>
+        </div>
+        <div>
+            <a href="{{ path('add_plat_restaurateur', {'id': restaurant.id}) }}"><button type="button" class="btn btn-primary">Ajouter un plat</button></a>
+        </div>
+    </div>
   <table class="table">
         <thead>
             <tr>
