@@ -46,7 +46,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="add_plat_order")
+     * @Route("/add/{id}", name="add_plat_order")
      */
     public function addPlatSession(Plat $plat)
     {
