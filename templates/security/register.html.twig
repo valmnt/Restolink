@@ -1,9 +1,28 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Inscription{% endblock %}
+
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-<div class="container" style="width: 30%; margin-top: 2%;">
+<style>
+.container {
+    width: 30%;
+    margin-top: 2%;
+}
+@media screen and (max-width: 1000px) {
+ .container {
+     width: 100%;
+ }
+}
+@media screen and (max-width: 640px) {
+ .container {
+     width: 100%;
+ }
+}
+</style>
+
+<div class="container">
 <div class="jumbotron">
 <h1 style="text-align: center;">Inscription 🧑🏻‍🤝‍🧑🏻</h1>
 {{ form(form) }}

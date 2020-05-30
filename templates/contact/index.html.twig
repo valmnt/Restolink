@@ -3,7 +3,23 @@
 {% block title %}Contact{% endblock %}
 
 {% block body %}
-<div class="container" style="width: 35%;">
+<style>
+.container {
+  width: 35%;
+}
+@media screen and (max-width: 1000px) {
+ .container {
+     width: 100%;
+ }
+}
+@media screen and (max-width: 640px) {
+ .container {
+     width: 100%;
+ }
+}
+</style>
+
+<div class="container">
 {% for message in app.flashes('success') %}
    <div class="alert alert-success" role="alert" style="margin-top: 2%;">
   <h4 class="alert-heading">Envoyé !</h4>
