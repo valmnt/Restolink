@@ -32,6 +32,7 @@ class PlatType extends AbstractType
                 'label' => 'Choisissez votre Image'
             ])
             ->add('Submit', SubmitType::class);
+
         $builder->get('image')
             ->addModelTransformer(new CallbackTransformer(
             function ($filepath) {
@@ -44,7 +45,6 @@ class PlatType extends AbstractType
 
             },
             function ($file) {
-                // transform the string back to an array
                 return $this->uploadService->uploadImage($file, $this->params->get('upload_directory'));
             }
         ))
