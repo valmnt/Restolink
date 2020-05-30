@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+
+/**
+ * @Route("/user")
+ */
 class UserController extends AbstractBaseController
 {
     private $entityManagerInterface;
@@ -26,7 +30,7 @@ class UserController extends AbstractBaseController
     }
 
     /**
-     * @Route("/user/{id}", name="user")
+     * @Route("/{id}", name="user")
      */
     public function index(PlatRepository $platRepository, RestaurantRepository $restaurantRepository, User $user)
     {
@@ -34,7 +38,7 @@ class UserController extends AbstractBaseController
     }
 
     /**
-     * @Route("/edit_user/{id}", name="edit_user")
+     * @Route("/edit/{id}", name="edit_user")
      */
     public function editUser(Request $request, User $user)
     {
@@ -50,7 +54,7 @@ class UserController extends AbstractBaseController
     }
 
     /**
-     * @Route("/alert_delete_user/{id}", name="alert_delete_user")
+     * @Route("/alert_delete/{id}", name="alert_delete_user")
      */
     public function alertDelete(User $user)
     {
@@ -59,7 +63,7 @@ class UserController extends AbstractBaseController
 
     // faire un listenener ou Subscriber pour delete les photos sur le serveur
     /**
-     * @Route("/delete_user/{id}", name="delete_user")
+     * @Route("/delete/{id}", name="delete_user")
      */
     public function deleteUser(User $user)
     {

@@ -2,42 +2,49 @@
 
 ![Bdd schema](img/bdd.png)
 
-## Explication :
+## Explications :
 
-### Plats type :
+### Contact
 
-Permet de définir le type du plat en question.
-Nous l'avons mis dans une autre table afin **d'eviter une répétition ainsi que de simplifier l'administation des types (ajout, modification, suppression).**
+Cette table contient tous les messages envoyés par les utilisateurs sur la page contact.
 
-### Membres _Histo :
+### User
 
-Permet un récapitulatif de toutes les transactions (commandes et ajout de fonds) d'un utilisateur.
-La table Commande n'est pas suffisante car elle ne prend pas en compte les frais de livraison.
-Sachant que les frais de livraison pourront être modifié.
+Cette table représente tous les utilisateurs du site (clients, restaurateurs, administrateurs).
+Elle contient leurs informations personnelles.
 
-### Parametres :
+### Restaurants
 
-Contient les frais de livraison afin que l'administrateur puisse les modifier sans nouvelle version du projet nécessaire.
+Cette table représente tous les restaurants et leurs informations personnelles.
+Elle contient le restaurateur qui est unique.
+
+Le champ is_Valid :
+* Si la valeur est null => le restaurant est en attente et il doit être validé ou refusé.
+* Si la valeur est à 1 => le restaurant a été validé par un admin.
+* Si la valeur est à 0 => le restaurant a été refusé par un admin.
+
+### Plats 
+Contient les informations relatives aux plats.
+Contient également le restaurant auquel il appartient.
+
+### Commandes
+Contient les informations relatives aux commandes des utilisateurs cela représente la liste des plats qu'ils ont commandés.
+Contient de plus, une référence à l'utilisateur et au restaurant.
+
+Nous **stockons les frais de livraisons** car si les frais de livraisons changent, ça **n'affecte pas l'historique de la commande passée.**
+
+Le champ Status :
+
+* Si la valeur est à 1 => la commande a été livrée.
+* Si la valeur est à 0 => la commande n'a pas été livrée.
 
 ### Commandes_details :
 
-Permet de stocker tous les plats d'une commande.
-Nous **sotckons le prix** car si le prix d'un plat change, ça **n'affecte pas l'historique de la commande passée.**
+Cette table permet de stocker tous les plats d'une commande.
+Nous **stockons le prix** car si le prix d'un plat change, ça **n'affecte pas l'historique de la commande passée.**
 
-### CodePromo :
 
-La table permet de créer des codes promos qui seront administrable.
-Le montant de réduction est en euros et toujours positif.
-Il sera soustrait au prix total de la commande.
-
-### Restaurant :
-
-Champs is_Valid :
-Si la valeur est null => le restaurant est en attente et doit être validé ou refusé.
-Si la valeur est à 1 => le restaurant a été validé par un admin.
-Si la valeur est à 0 => le restaurant a été refusé par un admin.
-
-## Explication Relations :
+## Explication des relations :
 
 ### Relation Membres - Restaurants :
 

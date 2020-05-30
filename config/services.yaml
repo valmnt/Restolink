@@ -33,3 +33,7 @@ services:
     App\EventSubscriber\CommandePersistSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+
+    App\EventSubscriber\SetRoleRestaurateurSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
