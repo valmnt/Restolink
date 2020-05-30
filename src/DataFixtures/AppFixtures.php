@@ -5,18 +5,26 @@ namespace App\DataFixtures;
 use App\Entity\Plat;
 use App\Entity\Restaurant;
 use App\Entity\User;
+use App\Utils\UploadService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
     private $userPasswordEncoderInterface;
+    private $uploadService;
+    private $params;
 
-    public function __construct(UserPasswordEncoderInterface $userPasswordEncoderInterface)
+    public function __construct(UploadService $uploadService, UserPasswordEncoderInterface $userPasswordEncoderInterface, ParameterBagInterface $params)
     {
         $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
+        $this->uploadService = $uploadService;
+        $this->params = $params;
     }
 
     public function roleUser($faker, $role, $manager)
@@ -33,12 +41,28 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
     }
+    public function createFakeImage($faker)
+    {
+        $filesystem = new Filesystem();
+        $faker = Factory::create();
+        $baseImages = [];
+        $baseImages[] = $this->params->get('kernel.project_dir') . '/src/DataFixtures/images/bk.jpeg';
+        $baseImages[] = $this->params->get('kernel.project_dir') . '/src/DataFixtures/images/mcdo.jpeg';
+        $baseImages[] = $this->params->get('kernel.project_dir') . '/src/DataFixtures/images/subway.jpeg';
+
+        $imageName = $this->params->get('kernel.project_dir') . '/src/DataFixtures/images/image.jpeg';
+        
+        $filesystem->copy($faker->randomElement($baseImages), $imageName);
+
+        return $this->uploadService->uploadImage(new File($imageName));
+        
+
+    }
 
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-
-        for ($i = 0; $i <= 25; $i++) {
+        for ($i = 0; $i < 25; $i++) {
 
             $resto = new Restaurant();
             $user = new User();
@@ -54,7 +78,7 @@ class AppFixtures extends Fixture
                 ->setLibelle($faker->word())
                 ->setAdresse($faker->address())
                 ->setIsValide($faker->boolean(80))
-                ->setImage('https://source.unsplash.com/random/400x300')
+                ->setImage($this->createFakeImage($faker))
                 ->setMembres($user);
             $manager->persist($resto);
 
@@ -63,7 +87,7 @@ class AppFixtures extends Fixture
                 $plat->setLibelle($faker->word())
                     ->setPrix($faker->numberBetween(1.50, 50))
                     ->setRestaurant($resto)
-                    ->setImage('https://source.unsplash.com/random/400x300');
+                    ->setImage($this->createFakeImage($faker));
                 $manager->persist($plat);
             }
         }

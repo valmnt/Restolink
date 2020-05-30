@@ -45,7 +45,7 @@ class PlatType extends AbstractType
 
             },
             function ($file) {
-                return $this->uploadService->uploadImage($file, $this->params->get('upload_directory'));
+                return $this->uploadService->uploadImage($file);
             }
         ))
     ;

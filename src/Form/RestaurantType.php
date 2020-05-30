@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Restaurant;
 use App\Utils\UploadService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -16,11 +15,9 @@ use Symfony\Component\HttpFoundation\File\File;
 class RestaurantType extends AbstractType
 {
     private $uploadService;
-    private $params;
-    public function __construct(UploadService $uploadService, ParameterBagInterface $params)
+    public function __construct(UploadService $uploadService)
     {
         $this->uploadService = $uploadService;
-        $this->params = $params;
     }
 
 
@@ -47,7 +44,7 @@ class RestaurantType extends AbstractType
 
             },
             function ($file) {
-                return $this->uploadService->uploadImage($file, $this->params->get('upload_directory'));
+                return $this->uploadService->uploadImage($file);
             }
         ));
     }
