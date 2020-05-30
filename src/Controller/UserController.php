@@ -47,7 +47,7 @@ class UserController extends AbstractBaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManagerInterface->flush();
-            return $this->redirectToRoute('user');
+            return $this->redirectToRoute('user', array('id' => $user->getId()));
         }
 
         return $this->render('user/edit.html.twig',  ['form' => $form->createView(), 'user' => $user]);
@@ -70,7 +70,7 @@ class UserController extends AbstractBaseController
         if ($user) {
             $this->entityManagerInterface->remove($user);
             $this->entityManagerInterface->flush();
-            return $this->render('index/index.html.twig');
+            return $this->render('restaurant/index.html.twig');
         }
     }
 
@@ -95,7 +95,7 @@ class UserController extends AbstractBaseController
             $userVerificator->setSolde($solde);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManagerInterface->flush();
-                return $this->redirectToRoute('user');
+                return $this->redirectToRoute('user', array('id' => $userVerificator->getId()));
             }
         } else if (!$passwordValid && $formPassword !== '') {
             $this->addFlash('danger', 'Mot de passe incorrect 😭');
