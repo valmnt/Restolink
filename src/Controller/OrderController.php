@@ -16,6 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+/**
+ * @Route("/order")
+ */
 class OrderController extends AbstractController
 {
     private $session;
@@ -28,7 +32,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order", name="plat_order")
+     * @Route("/", name="plat_order")
      */
     public function index()
     {
@@ -42,7 +46,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order/{id}", name="add_plat_order")
+     * @Route("/{id}", name="add_plat_order")
      */
     public function addPlatSession(Plat $plat)
     {

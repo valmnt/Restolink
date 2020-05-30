@@ -33,5 +33,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/mes_restaurant, roles: IS_AUTHENTICATED_FULLY }
+    
+        
+        - { path: ^/mes_restaurants$, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/mes_restaurants/add_restaurant, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/mes_restaurants, roles: ROLE_RESTAURATEUR }
+        - { path: ^/user, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/order, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
