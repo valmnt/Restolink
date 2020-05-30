@@ -11,6 +11,6 @@
 </style>
 <div class="container">
 {{ form(form) }}
-<a href="{{ path('user') }}"><button class="btn btn-danger">Cancel</button></a>
+<a href="{{ path('user', {'id' : user.id})}}"><button class="btn btn-danger">Cancel</button></a>
 </div>
 {% endblock %}

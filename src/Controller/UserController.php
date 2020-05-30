@@ -50,7 +50,7 @@ class UserController extends AbstractBaseController
             return $this->redirectToRoute('user');
         }
 
-        return $this->render('user/edit.html.twig',  ['form' => $form->createView()]);
+        return $this->render('user/edit.html.twig',  ['form' => $form->createView(), 'user' => $user]);
     }
 
     /**
@@ -101,6 +101,6 @@ class UserController extends AbstractBaseController
             $this->addFlash('danger', 'Mot de passe incorrect 😭');
         }
 
-        return $this->render('user/wallet.html.twig', ['form' => $form->createView()]);
+        return $this->render('user/wallet.html.twig', ['form' => $form->createView(), 'user' => $userVerificator]);
     }
 }
