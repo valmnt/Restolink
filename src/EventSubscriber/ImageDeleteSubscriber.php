@@ -44,8 +44,9 @@ class ImageDeleteSubscriber implements EventSubscriber
             
             $changeSet = $args->getEntityChangeSet();
             
-            if ($oldImage =$changeSet['image'][0]) 
+            if (isset($changeSet['image'][0])) 
             {
+                $oldImage = $changeSet['image'][0];
                 $filesystem = new Filesystem();
                 $filesystem->remove($this->params->get('kernel.project_dir').'/public'.$oldImage);
 

@@ -4,6 +4,10 @@
 
 {% block body %}
 <div class="container" style="width: 20%;">
-{{ form(form) }}
+{{ form_start(form) }}
+    {{ form_row(form.libelle) }}
+    {{ form_row(form.prix) }}
+    {{ form_row(form.imageFile) }}
+{{ form_end(form) }}
 </div>
 {% endblock %}
