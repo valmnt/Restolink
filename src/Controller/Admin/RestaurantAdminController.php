@@ -7,6 +7,7 @@ use App\Entity\Restaurant;
 use App\Form\PlatType;
 use App\Form\RestaurantType;
 use App\Repository\RestaurantRepository;
+use App\Utils\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,9 +21,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class RestaurantAdminController extends AbstractController
 {
     private $em;
-    public function __construct(EntityManagerInterface $em)
+    private $uploadService;
+    public function __construct(EntityManagerInterface $em, UploadService $uploadService)
     {
         $this->em = $em;
+        $this->uploadService = $uploadService;
     }
 
     /**
@@ -45,9 +48,12 @@ class RestaurantAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($restaurant);
-            $entityManager->flush();
+            $uploadedFile = $form['imageFile']->getData();
+            if ($uploadedFile) {
+                $restaurant->setImage($this->uploadService->uploadImage($uploadedFile));
+            }
+            $this->em->persist($restaurant);
+            $this->em->flush();
 
             return $this->redirectToRoute('admin_restaurant_index');
         }
@@ -77,8 +83,11 @@ class RestaurantAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
+            $uploadedFile = $form['imageFile']->getData();
+            if ($uploadedFile) {
+                $restaurant->setImage($this->uploadService->uploadImage($uploadedFile));
+            }
+            $this->em->flush();
             return $this->redirectToRoute('admin_restaurant_index');
         }
 
@@ -109,6 +118,11 @@ class RestaurantAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedFile = $form['imageFile']->getData();
+            if ($uploadedFile) {
+                $plat->setImage($this->uploadService->uploadImage($uploadedFile));
+            }
+
             $plat->setRestaurant($restaurant);
             $this->em->persist($plat);
             $this->em->flush();
@@ -140,6 +154,10 @@ class RestaurantAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedFile = $form['imageFile']->getData();
+            if ($uploadedFile) {
+                $plat->setImage($this->uploadService->uploadImage($uploadedFile));
+            }
             $this->em->flush();
             return $this->redirectToRoute('admin_restaurant_show', ['id' => $restaurant->getId()]);
         }

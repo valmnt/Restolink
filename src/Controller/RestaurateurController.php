@@ -26,9 +26,11 @@ class RestaurateurController extends AbstractController
 {
 
     private $em;
-    public function __construct(EntityManagerInterface $em)
+    private $uploadService;
+    public function __construct(EntityManagerInterface $em, UploadService $uploadService)
     {
         $this->em = $em;
+        $this->uploadService = $uploadService;
     }
 
     /**
@@ -37,7 +39,6 @@ class RestaurateurController extends AbstractController
     public function index()
     {
         $user = $this->getUser();
-
         return $this->render('restaurateur/index.html.twig', [
             'user' => $user,
         ]);
@@ -51,14 +52,17 @@ class RestaurateurController extends AbstractController
         $restaurant = new Restaurant();
         $form = $this->createForm(RestaurantType::class, $restaurant);
         $form->handleRequest($request);
-        $user = new User();
+
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedFile = $form['imageFile']->getData();
+            if ($uploadedFile) {
+                $restaurant->setImage($this->uploadService->uploadImage($uploadedFile));
+            }
             $restaurant->setMembres($user);
             $this->em->persist($restaurant);
             $this->em->flush();
-
             return $this->redirectToRoute('mes_restaurants');
         }
 
@@ -78,6 +82,10 @@ class RestaurateurController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $uploadedFile = $form['imageFile']->getData();
+                if ($uploadedFile) {
+                    $restaurant->setImage($this->uploadService->uploadImage($uploadedFile));
+                }
                 $this->em->flush();
                 return $this->redirectToRoute('mes_restaurants');
             }
@@ -149,6 +157,10 @@ class RestaurateurController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $uploadedFile = $form['imageFile']->getData();
+                if ($uploadedFile) {
+                    $plat->setImage($this->uploadService->uploadImage($uploadedFile));
+                }
                 $plat->setRestaurant($restaurant);
                 $this->em->persist($plat);
                 $this->em->flush();
@@ -174,6 +186,11 @@ class RestaurateurController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $uploadedFile = $form['imageFile']->getData();
+                if ($uploadedFile) {
+                    
+                    $plat->setImage($this->uploadService->uploadImage($uploadedFile));
+                }
                 $this->em->flush();
                 return $this->redirectToRoute('plats_restaurant_restaurateur', ['id' => $restaurant->getId()]);
             }
