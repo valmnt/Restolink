@@ -15,7 +15,7 @@ class UploadService
     }
 
 
-    public function uploadImage(File $file)
+    public function uploadImage(File $file, ?string $existingFilename)
     {
         $fileName = md5(uniqid()) . '.' . $file->guessExtension();
         $file->move($this->uploadDirectory, $fileName);
