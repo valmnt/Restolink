@@ -35,7 +35,7 @@ security:
     access_control:
     
         
-        - { path: ^/mes_restaurants$, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/mes_restaurants/?$, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/mes_restaurants/add_restaurant, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/mes_restaurants, roles: ROLE_RESTAURATEUR }
         - { path: ^/user, roles: IS_AUTHENTICATED_FULLY }
